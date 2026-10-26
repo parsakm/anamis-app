@@ -71,7 +71,7 @@ nav button.on{color:var(--gold);font-weight:600;box-shadow:inset 0 3px 0 var(--g
 .gi .im{height:90px;background:linear-gradient(135deg,#A98429,#F1D77E 50%,#A98429);display:grid;place-items:center;color:#12233F;font-size:34px}
 .gi .t{padding:8px 10px;font-size:14px}
 .gi small{display:block;color:var(--mu);font-size:12px}
-.ar{border-bottom:1px solid var(--ln);padding:10px 0}.ar input{margin-bottom:8px}.rm{background:none;border:0;color:var(--neg);font:inherit;font-size:13px;padding:4px 0;cursor:pointer;text-decoration:underline}.role{margin-inline-start:auto;background:none;border:1px solid rgba(227,185,72,.5);color:var(--gold2);border-radius:20px;padding:4px 12px;font:inherit;font-size:12px;cursor:pointer}.role[aria-pressed=true]{background:var(--gold);color:#12233F;font-weight:600}.bdg{display:none;background:var(--neg);color:#12233F;border-radius:10px;font-size:11px;padding:0 6px;margin-inline-start:4px;font-weight:800}.bdg.on{display:inline}body:not(.isadmin) .adm-only{display:none}summary{cursor:pointer;color:var(--mu);font-size:14px}
+.ar{border-bottom:1px solid var(--ln);padding:10px 0}.ar input{margin-bottom:8px}.rm{background:none;border:0;color:var(--neg);font:inherit;font-size:13px;padding:4px 0;cursor:pointer;text-decoration:underline}.role{margin-inline-start:auto;background:none;border:1px solid rgba(227,185,72,.5);color:var(--gold2);border-radius:20px;padding:4px 12px;font:inherit;font-size:12px;cursor:pointer}.role[aria-pressed=true]{background:var(--gold);color:#12233F;font-weight:600}.bdg{display:none;background:var(--neg);color:#12233F;border-radius:10px;font-size:11px;padding:0 6px;margin-inline-start:4px;font-weight:800}.bdg.on{display:inline}body:not(.isadmin) .adm-only{display:none}.stp{display:flex;gap:6px}.stp button{width:42px;flex:none;background:var(--sf2);color:var(--gold2);border:1px solid var(--ln);border-radius:8px;font:inherit;font-size:18px;cursor:pointer}.stp input{text-align:center;margin-bottom:0!important}summary{cursor:pointer;color:var(--mu);font-size:14px}
 nav button{font-size:12px}
 </style>
 </head>
@@ -104,9 +104,8 @@ nav button{font-size:12px}
   <div class="card">
     <label for="type">نوع معامله</label>
     <select id="type"></select>
-    <div class="fld" data-k="w"><label for="f_w">وزن (گرم)</label><input id="f_w" inputmode="decimal"></div>
-    <div class="fld" data-k="k"><label for="f_k">عیار (۷۵۰ یعنی ۱۸ عیار)</label><input id="f_k" inputmode="numeric" value="750"></div>
-    <div class="fld" data-k="ct"><label for="f_ct">نوع سکه</label><select id="f_ct"><option value="tam">تمام</option><option value="nim">نیم</option><option value="rob">ربع</option></select></div>
+    <div class="fld" data-k="w"><label for="f_w">وزن (گرم، ۱۸ عیار)</label><input id="f_w" inputmode="decimal"></div>
+        <div class="fld" data-k="ct"><label for="f_ct">نوع سکه</label><select id="f_ct"><option value="tam">تمام</option><option value="nim">نیم</option><option value="rob">ربع</option></select></div>
     <div class="fld" data-k="n"><label for="f_n">تعداد</label><input id="f_n" inputmode="numeric"></div>
     <div class="fld" data-k="p"><label for="f_p" id="pl">قیمت هر گرم (تومان)</label><input id="f_p" inputmode="numeric"></div>
     <div class="fld" data-k="a"><label for="f_a">مبلغ (تومان)</label><input id="f_a" inputmode="numeric"></div>
@@ -150,7 +149,7 @@ nav button{font-size:12px}
 <script>
 const $=s=>document.querySelector(s);
 const TYPES={gold_buy:'خرید آبشده',gold_sell:'فروش آبشده',gold_in:'واریز طلا',gold_out:'برداشت طلا',coin_buy:'خرید سکه',coin_sell:'فروش سکه',cash_in:'واریز تومان',cash_out:'برداشت تومان'};
-const SHOW={gold_buy:['w','k','p'],gold_sell:['w','k','p'],gold_in:['w','k'],gold_out:['w','k'],coin_buy:['ct','n','p'],coin_sell:['ct','n','p'],cash_in:['a'],cash_out:['a']};
+const SHOW={gold_buy:['w','p'],gold_sell:['w','p'],gold_in:['w'],gold_out:['w'],coin_buy:['ct','n','p'],coin_sell:['ct','n','p'],cash_in:['a'],cash_out:['a']};
 const CN={tam:'تمام',nim:'نیم',rob:'ربع'},CK={tam:'t',nim:'n',rob:'r'};
 const KEYS=[['g','گرم ۱۸ عیار'],['t','تمام سکه'],['n','نیم سکه'],['r','ربع سکه']];
 const D=[{n:'دستبند زنجیر',min:3,max:12,wm:'t',wv:1800000,ic:'◌'},{n:'گردنبند پلاک',min:2,max:8,wm:'g',wv:9,ic:'◈'},{n:'انگشتر ساده',min:2,max:7,wm:'m',wv:8,ic:'○'},{n:'گوشواره حلقه‌ای',min:1,max:5,wm:'t',wv:2200000,ic:'◎'},{n:'النگو',min:8,max:30,wm:'g',wv:6,ic:'◯'},{n:'نیم‌ست',min:10,max:40,wm:'m',wv:7,ic:'❖'}];
@@ -159,8 +158,9 @@ const fa=n=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:3});
 const sg=(n,u='')=>'<bdi dir="ltr" class="'+(n<0?'neg':n>0?'pos':'')+'">'+(n<0?'−':n>0?'+':'')+fa(Math.abs(n))+'</bdi>'+(u?'<span class="u">'+u+'</span>':'');
 const num=id=>parseFloat(String($(id).value).replace(/[,٬]/g,''))||0;
 const now=()=>new Date().toLocaleString('fa-IR');
-let S={rows:[{id:'m',name:'آبشده مثقال',kind:'m',buy:124655000,sell:124194000},{id:'g',name:'گرم ۱۸ عیار',kind:'g',buy:27050000,sell:26950000},{id:'t',name:'تمام سکه',kind:'c',ct:'tam',buy:270700000,sell:268800000},{id:'n',name:'نیم سکه',kind:'c',ct:'nim',buy:142000000,sell:139500000},{id:'r',name:'ربع سکه',kind:'c',ct:'rob',buy:76000000,sell:74000000}],upd:now(),entries:[],orders:[],queue:[],admin:false};
+let S={rows:[{id:'m',name:'آبشده مثقال',kind:'m',src:'mesghal',base:124424000,ba:231000,sa:-230000},{id:'g',name:'گرم ۱۸ عیار',kind:'g',src:'geram18',base:27000000,ba:50000,sa:-50000},{id:'t',name:'تمام سکه',kind:'c',ct:'tam',src:'sekee',base:269750000,ba:950000,sa:-950000},{id:'n',name:'نیم سکه',kind:'c',ct:'nim',src:'nim',base:140750000,ba:1250000,sa:-1250000},{id:'r',name:'ربع سکه',kind:'c',ct:'rob',src:'rob',base:75000000,ba:1000000,sa:-1000000}],upd:now(),entries:[],orders:[],queue:[],admin:false,live:{url:'',on:false,ok:null,at:''}};
 try{const s=localStorage.getItem('anamis3');if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
+S.rows.forEach(r=>{if(r.base===undefined){r.base=Math.round(((r.buy||0)+(r.sell||0))/2);r.ba=(r.buy||0)-r.base;r.sa=(r.sell||0)-r.base;r.src=r.src||({m:'mesghal',g:'geram18',t:'sekee',n:'nim',r:'rob'}[r.id]||'');delete r.buy;delete r.sell}});
 const save=()=>{try{localStorage.setItem('anamis3',JSON.stringify(S))}catch(e){}};
 const zero=()=>({gold:0,toman:0,coin:{tam:0,nim:0,rob:0},jewel:0,wageT:0,wageG:0});
 
@@ -183,7 +183,7 @@ function calc(t,v){
   }
   return d;
 }
-function vals(){return{w:num('#f_w'),k:num('#f_k')||750,ct:$('#f_ct').value,n:num('#f_n'),p:num('#f_p'),a:num('#f_a')}}
+function vals(){return{w:num('#f_w'),k:750,ct:$('#f_ct').value,n:num('#f_n'),p:num('#f_p'),a:num('#f_a')}}
 function lines(d){
   const o=[];
   if(d.gold)o.push(['طلا',sg(d.gold,'گرم')]);
@@ -198,11 +198,14 @@ function pv(d){
   return h;
 }
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const gp=j=>{const r=S.rows.find(x=>x.kind==='g');if(r)return j?r.sell:r.buy;const m=S.rows.find(x=>x.kind==='m');return m?Math.round((j?m.sell:m.buy)/4.6083):0};
+const pr=(r,j)=>Math.max(0,Math.round(r.base+(j?r.sa:r.ba)));
+const gp=j=>{const r=S.rows.find(x=>x.kind==='g');if(r)return pr(r,j);const m=S.rows.find(x=>x.kind==='m');return m?Math.round(pr(m,j)/4.6083):0};
+const SRCO=[['','دستی'],['geram18','گرم ۱۸ عیار'],['mesghal','مثقال'],['sekee','تمام سکه'],['nim','نیم سکه'],['rob','ربع سکه']];
+const STEP=r=>r.kind==='c'?100000:r.kind==='m'?50000:10000;
 function defp(){
   const t=$('#type').value,j=t.endsWith('sell')?1:0;
   if(t.startsWith('gold'))return gp(j);
-  if(t.startsWith('coin')){const r=S.rows.find(x=>x.kind==='c'&&x.ct===$('#f_ct').value);return r?(j?r.sell:r.buy):''}
+  if(t.startsWith('coin')){const r=S.rows.find(x=>x.kind==='c'&&x.ct===$('#f_ct').value);return r?pr(r,j):''}
   return '';
 }
 function show(){
@@ -222,8 +225,9 @@ function txRow(e,i,btn){
   return '<div class="tx'+(e.void?' void':'')+'"><div><b>'+e.title+'</b><small>'+e.date+(e.note?'، '+e.note:'')+'</small>'+(btn?'<button data-i="'+i+'">'+(e.void?'بازگردانی':'ابطال')+'</button>':'')+'</div><div class="r">'+lines(e.d).map(x=>'<div>'+x[1]+' <span class="u">'+x[0]+'</span></div>').join('')+'</div></div>';
 }
 function board(){
-  let h='<div class="lbl">آخرین بروزرسانی: '+S.upd+'</div><div class="lbl">روی قیمت بزنید تا معامله ثبت شود.</div><h2>قیمت‌ها</h2>';
-  S.rows.forEach(r=>{h+='<div class="prow"><div class="n">'+esc(r.name)+'</div>'+[0,1].map(j=>'<button class="pbtn '+(j?'s':'b')+'" data-r="'+r.id+'" data-j="'+j+'">'+fa(j?r.sell:r.buy)+'<small>'+(j?'شما می‌فروشید':'شما می‌خرید')+'</small></button>').join('')+'</div>'});
+  const L=S.live,b=L.url&&L.on?(L.ok?'<span class="pos">● قیمت لحظه‌ای</span>':L.ok===false?'<span class="neg">● منبع در دسترس نیست، قیمت دستی</span>':'در حال اتصال'):'قیمت دستی ادمین';
+  let h='<div class="lbl">آخرین بروزرسانی: '+S.upd+'</div><div class="lbl">'+b+'</div><div class="lbl">روی قیمت بزنید تا معامله ثبت شود.</div><h2>قیمت‌ها</h2>';
+  S.rows.forEach(r=>{h+='<div class="prow"><div class="n">'+esc(r.name)+'</div>'+[0,1].map(j=>'<button class="pbtn '+(j?'s':'b')+'" data-r="'+r.id+'" data-j="'+j+'">'+fa(pr(r,j))+'<small>'+(j?'شما می‌فروشید':'شما می‌خرید')+'</small></button>').join('')+'</div>'});
   if(!S.rows.length)h+='<div class="empty">ردیفی وجود ندارد. از بخش ویرایش اضافه کنید.</div>';
   $('#board').innerHTML=h;
 }
@@ -250,9 +254,9 @@ function seed(){
 }
 function trade(id,j){
   const r=S.rows.find(x=>x.id===id);if(!r)return;
-  const side=j?'sell':'buy',p=j?r.sell:r.buy;
+  const side=j?'sell':'buy',p=pr(r,j);
   if(r.kind==='c'){$('#type').value='coin_'+side;$('#f_ct').value=r.ct;$('#f_n').value='';$('#f_p').value=p}
-  else{$('#type').value='gold_'+side;$('#f_k').value=750;if(r.kind==='m'){$('#f_w').value=4.608;$('#f_p').value=Math.round(p/4.6083)}else{$('#f_w').value='';$('#f_p').value=p}}
+  else{$('#type').value='gold_'+side;if(r.kind==='m'){$('#f_w').value=4.608;$('#f_p').value=Math.round(p/4.6083)}else{$('#f_w').value='';$('#f_p').value=p}}
   show();go('add');
 }
 let sel=0;
@@ -267,19 +271,56 @@ $('#f_ct').onchange=()=>{$('#f_p').value='';show()};
 document.querySelectorAll('#v-add input,#v-add select').forEach(e=>e.addEventListener('input',prev));
 $('#board').onclick=e=>{const b=e.target.closest('.pbtn');if(b)trade(b.dataset.r,+b.dataset.j)};
 function adm(){
-  $('#adm').innerHTML=S.rows.map((r,i)=>'<div class="ar"><input data-i="'+i+'" data-f="name" value="'+esc(r.name)+'" aria-label="نام ردیف"><div class="row2"><input data-i="'+i+'" data-f="buy" inputmode="numeric" value="'+r.buy+'" aria-label="شما می‌خرید"><input data-i="'+i+'" data-f="sell" inputmode="numeric" value="'+r.sell+'" aria-label="شما می‌فروشید"></div><button class="rm" data-rm="'+i+'">حذف ردیف</button></div>').join('')+'<label for="n_name">افزودن ردیف جدید</label><div class="row2"><input id="n_name" placeholder="نام ردیف"><select id="n_kind"><option value="g">طلا، قیمت هر گرم</option><option value="m">طلا، قیمت هر مثقال</option><option value="tam">سکه تمام</option><option value="nim">سکه نیم</option><option value="rob">سکه ربع</option></select></div><button class="btn ghost" id="n_add">افزودن ردیف</button>';
+  const L=S.live,st=L.url?(L.on?(L.ok?'<span class="pos">متصل، '+L.at+'</span>':L.ok===false?'<span class="neg">خطا در دریافت، قیمت دستی استفاده می‌شود</span>':'در حال اتصال'):'خاموش'):'آدرس منبع وارد نشده';
+  let h='<div class="ar"><b>قیمت لحظه‌ای</b><label for="lv_url">آدرس منبع قیمت (JSON)</label><input id="lv_url" dir="ltr" inputmode="url" placeholder="https://..." value="'+esc(L.url)+'"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="lv_on" style="width:auto;margin:0"'+(L.on?' checked':'')+'>استفاده از قیمت لحظه‌ای</label><div class="lbl">وضعیت: '+st+'</div><button class="btn ghost" id="lv_go">دریافت قیمت (تست)</button></div>';
+  h+=S.rows.map((r,i)=>{
+    const adj=(f,t)=>'<div><label>'+t+'</label><div class="stp"><button data-st="'+f+'" data-i="'+i+'" data-d="-1" aria-label="کم کردن">−</button><input dir="ltr" data-i="'+i+'" data-f="'+f+'" inputmode="text" value="'+r[f]+'"><button data-st="'+f+'" data-i="'+i+'" data-d="1" aria-label="زیاد کردن">+</button></div></div>';
+    return '<div class="ar"><input data-i="'+i+'" data-f="name" value="'+esc(r.name)+'" aria-label="نام ردیف"><label>منبع قیمت پایه</label><select data-i="'+i+'" data-f="src">'+SRCO.map(o=>'<option value="'+o[0]+'"'+(o[0]===(r.src||'')?' selected':'')+'>'+o[1]+'</option>').join('')+'</select><label>قیمت پایه (تومان)</label><input dir="ltr" data-i="'+i+'" data-f="base" inputmode="numeric" value="'+r.base+'"><div class="row2">'+adj('ba','تعدیل «شما می‌خرید»')+adj('sa','تعدیل «شما می‌فروشید»')+'</div><div class="lbl" id="fin'+i+'">قیمت نهایی: خرید '+fa(pr(r,0))+'، فروش '+fa(pr(r,1))+'</div><button class="rm" data-rm="'+i+'">حذف ردیف</button></div>';
+  }).join('');
+  h+='<label for="n_name">افزودن ردیف جدید</label><div class="row2"><input id="n_name" placeholder="نام ردیف"><select id="n_kind"><option value="g">طلا، قیمت هر گرم</option><option value="m">طلا، قیمت هر مثقال</option><option value="tam">سکه تمام</option><option value="nim">سکه نیم</option><option value="rob">سکه ربع</option></select></div><button class="btn ghost" id="n_add">افزودن ردیف</button>';
+  $('#adm').innerHTML=h;
 }
 adm();
-$('#adm').oninput=e=>{const t=e.target;if(t.dataset.i===undefined)return;const r=S.rows[t.dataset.i];r[t.dataset.f]=t.dataset.f==='name'?t.value:(parseFloat(t.value)||0);S.upd=now();save();board()};
+async function pullLive(manual){
+  const L=S.live;if(!L.url||(!L.on&&!manual))return;
+  try{
+    const res=await fetch(L.url,{cache:'no-store'}),j=await res.json();
+    const cur=j&&j.current?j.current:j,rial=!!(j&&j.current)||j.unit==='rial';
+    const val=x=>{if(x==null)return NaN;const v=typeof x==='object'?(x.p!==undefined?x.p:x.price):x;return parseFloat(String(v).replace(/[,٬\s]/g,''))/(rial?10:1)};
+    const A={geram18:['geram18','gold18'],mesghal:['mesghal'],sekee:['sekee','tam'],nim:['nim'],rob:['rob']};
+    let n=0;
+    S.rows.forEach(r=>{if(!r.src)return;let v=NaN;for(const k of A[r.src]){v=val(cur[k]);if(v>0)break}if(v>0){r.base=Math.round(v);n++}});
+    if(!n)throw new Error('empty');
+    L.ok=true;L.at=now();S.upd=L.at;
+    if(manual)toast('قیمت‌ها بروز شد');
+  }catch(e){L.ok=false;if(manual)toast('دریافت قیمت ممکن نشد')}
+  save();board();
+  if(!$('#adm').contains(document.activeElement))adm();
+}
+$('#adm').oninput=e=>{
+  const t=e.target;
+  if(t.id==='lv_url'){S.live.url=t.value.trim();S.live.ok=null;save();return}
+  if(t.id==='lv_on'){S.live.on=t.checked;S.live.ok=null;save();board();if(t.checked)pullLive();return}
+  if(t.dataset.i===undefined)return;
+  const r=S.rows[t.dataset.i],f=t.dataset.f;
+  if(f==='name')r.name=t.value;
+  else if(f==='src')r.src=t.value;
+  else r[f]=parseFloat(String(t.value).replace(/[,٬]/g,''))||0;
+  S.upd=now();save();board();
+  const fin=$('#fin'+t.dataset.i);
+  if(fin)fin.textContent='قیمت نهایی: خرید '+fa(pr(r,0))+'، فروش '+fa(pr(r,1));
+};
 $('#adm').onclick=e=>{
   const t=e.target;
+  if(t.dataset.st){const r=S.rows[t.dataset.i];r[t.dataset.st]+=STEP(r)*(+t.dataset.d);S.upd=now();save();adm();board();return}
   if(t.dataset.rm!==undefined){S.rows.splice(t.dataset.rm,1);save();adm();board();return}
+  if(t.id==='lv_go'){S.live.on=true;pullLive(true);return}
   if(t.id==='n_add'){
     const nm=$('#n_name').value.trim(),k=$('#n_kind').value;
     if(!nm){toast('نام ردیف را وارد کنید');return}
-    const c=['tam','nim','rob'].includes(k);
-    S.rows.push({id:'r'+Date.now(),name:nm,kind:c?'c':k,ct:c?k:undefined,buy:0,sell:0});
-    S.upd=now();save();adm();board();toast('ردیف اضافه شد، قیمت‌ها را وارد کنید');
+    const c=['tam','nim','rob'].includes(k),SM={g:'geram18',m:'mesghal',tam:'sekee',nim:'nim',rob:'rob'};
+    S.rows.push({id:'r'+Date.now(),name:nm,kind:c?'c':k,ct:c?k:undefined,src:SM[k],base:0,ba:0,sa:0});
+    S.upd=now();save();adm();board();toast('ردیف اضافه شد، قیمت پایه را وارد کنید');
   }
 };
 $('#gal').innerHTML=D.map((x,i)=>'<button class="gi" data-i="'+i+'"><div class="im">'+x.ic+'</div><div class="t">'+x.n+'<small>وزن '+fa(x.min)+' تا '+fa(x.max)+' گرم</small><small>'+wl(x)+'</small></div></button>').join('');
@@ -357,7 +398,7 @@ $('#queue').onclick=e=>{
   if(q&&q.st==='wait')qDone(q,e.target.dataset.a);
 };
 if(!S.entries.length)seed();
-applyRole();board();render();renderQ();show();setInterval(tick,1000);
+applyRole();board();render();renderQ();show();setInterval(tick,1000);pullLive();setInterval(pullLive,30000);
 </script>
 <script>
 if('serviceWorker' in navigator&&location.protocol!=='file:'){
