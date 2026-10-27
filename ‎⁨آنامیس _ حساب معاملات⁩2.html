@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#152844">
+<title>آنامیس | حساب معاملات</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="آنامیس">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#152844;--sf:#1D3459;--sf2:#243E68;--ln:#44546F;--gold:#E3B948;--gold2:#F4DC8C;--tx:#F1EAD5;--mu:#A9B6CC;--neg:#F29A8A;--pos:#8FD9A8;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:radial-gradient(120% 55% at 50% 0,#21407A 0,var(--bg) 62%) fixed,var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.7;padding-bottom:84px;max-width:560px;margin-inline:auto}
+header{display:flex;align-items:center;gap:12px;padding:14px 18px 6px}
+header img{width:58px;height:auto;border-radius:10px;mix-blend-mode:lighten}
+header b{display:block;font-size:20px;color:var(--gold);letter-spacing:.5px}
+header span{font-size:13px;color:var(--mu)}
+main{padding:8px 16px}
+section{display:none}section.on{display:block}
+.card{background:var(--sf);border:1px solid rgba(227,185,72,.3);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.hero{border-color:var(--gold);background:linear-gradient(160deg,#274581,#172C4E);box-shadow:inset 0 0 0 1px rgba(227,185,72,.25)}
+.hero .v{font-size:40px;font-weight:800;color:var(--gold);line-height:1.2}
+.lbl{font-size:13px;color:var(--mu)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid .card{margin:0}
+.v{font-size:20px;font-weight:600}
+.neg{color:var(--neg)}.pos{color:var(--pos)}
+.u{font-size:13px;color:var(--mu);font-weight:400;margin-inline-start:4px}
+h2{font-size:16px;margin:18px 0 8px;font-weight:600;color:var(--gold2);display:flex;align-items:center;gap:8px}h2::before{content:"";width:4px;height:16px;border-radius:2px;background:linear-gradient(var(--gold2),var(--gold))}
+.price{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.price input{width:150px;text-align:left}
+input,select{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+label{display:block;font-size:13px;color:var(--mu);margin:10px 0 4px}
+.fld{display:none}.fld.on{display:block}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;margin-top:14px;background:linear-gradient(135deg,var(--gold2),var(--gold) 55%,#B88A22);color:#12233F;border:0;border-radius:12px;padding:13px;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--mu);border:1px solid var(--ln);font-weight:400;font-size:14px;padding:9px}
+.prev{margin-top:12px;border:1px dashed var(--ln);border-radius:12px;padding:10px 12px;font-size:14px;min-height:44px;color:var(--mu)}
+.prev div{display:flex;justify-content:space-between;color:var(--tx)}
+.tx{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--ln)}
+.tx:last-child{border:0}
+.tx small{display:block;color:var(--mu);font-size:12px}
+.tx.void{opacity:.45;text-decoration:line-through}
+.tx .r{text-align:left;font-size:14px;white-space:nowrap}
+.tx button{background:none;border:0;color:var(--mu);font:inherit;font-size:12px;padding:2px 0;cursor:pointer;text-decoration:underline}
+.empty{color:var(--mu);padding:14px 0;text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0E1D36;border-top:1px solid rgba(227,185,72,.45);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav div{display:flex;width:100%;max-width:560px}
+nav button{flex:1;background:none;border:0;color:var(--mu);font:inherit;font-size:13px;padding:12px 4px;cursor:pointer}
+nav button.on{color:var(--gold);font-weight:600;box-shadow:inset 0 3px 0 var(--gold)}
+#toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--gold);color:#12233F;padding:8px 18px;border-radius:20px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:9}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+
+.prow{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid rgba(227,185,72,.3);border-radius:14px;padding:8px 10px;margin-bottom:8px}
+.prow .n{flex:1;font-size:15px}
+.pbtn{width:108px;border:0;border-radius:8px;padding:9px 0;font:inherit;font-weight:800;font-size:15px;color:#fff;cursor:pointer}
+.pbtn small{display:block;font-size:11px;font-weight:400;opacity:.92}
+.pbtn.b{background:#2A7F4E}.pbtn.s{background:#B3403A}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gi{background:var(--sf);border:1px solid rgba(227,185,72,.3);border-radius:14px;overflow:hidden;padding:0;text-align:right;color:var(--tx);font:inherit;cursor:pointer}
+.gi .im{height:90px;background:linear-gradient(135deg,#A98429,#F1D77E 50%,#A98429);display:grid;place-items:center;color:#12233F;font-size:34px}
+.gi .t{padding:8px 10px;font-size:14px}
+.gi small{display:block;color:var(--mu);font-size:12px}
+.ar{border-bottom:1px solid var(--ln);padding:10px 0}.ar input{margin-bottom:8px}.rm{background:none;border:0;color:var(--neg);font:inherit;font-size:13px;padding:4px 0;cursor:pointer;text-decoration:underline}.role{margin-inline-start:auto;background:none;border:1px solid rgba(227,185,72,.5);color:var(--gold2);border-radius:20px;padding:4px 12px;font:inherit;font-size:12px;cursor:pointer}.role[aria-pressed=true]{background:var(--gold);color:#12233F;font-weight:600}.bdg{display:none;background:var(--neg);color:#12233F;border-radius:10px;font-size:11px;padding:0 6px;margin-inline-start:4px;font-weight:800}.bdg.on{display:inline}body:not(.isadmin) .adm-only{display:none}.stp{display:flex;gap:6px}.stp button{width:42px;flex:none;background:var(--sf2);color:var(--gold2);border:1px solid var(--ln);border-radius:8px;font:inherit;font-size:18px;cursor:pointer}.stp input{text-align:center;margin-bottom:0!important}.imgs{display:flex;gap:8px;overflow-x:auto;margin:8px 0}.imgs img{height:120px;border-radius:10px;flex:none}.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.th{position:relative}.th img{width:64px;height:64px;object-fit:cover;border-radius:8px}.th button{position:absolute;top:-6px;inset-inline-start:-6px;width:22px;height:22px;border-radius:50%;border:0;background:var(--neg);color:#12233F;font-weight:800;cursor:pointer;padding:0}.gi .im img{width:100%;height:100%;object-fit:cover}.pbtn.off{background:var(--sf2);color:var(--mu);cursor:not-allowed}.ba{font-size:12px;color:var(--mu);margin-top:4px}.upl{display:inline-block;border:1px dashed var(--gold);color:var(--gold2);border-radius:10px;padding:8px 14px;cursor:pointer;margin:6px 0;font-size:14px}.chk{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0;font-size:14px}.chk label{display:flex;align-items:center;gap:6px;margin:0;color:var(--tx)}.chk input{width:auto;margin:0}input[readonly]{opacity:.75}summary{cursor:pointer;color:var(--mu);font-size:14px}
+nav button{font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAEEANwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwUUtJS13nGFFFFMBKWiikAUUUUAJRS0UwCirem6XqGqSiPTbG5u3PaGJn/kK66w+FPjC82k6WLdT3uJkT9Mk/pWFTEUqfxySLjTnLZHDUleqwfA7xJIP3t3pkX/bR2/ktTt8CtfxlNT0tj6ZkH/stc7zPCreojT6tV/lPJKK9Kvfgt4tt0LQpYXQHaO4wT/30BXK6t4L8S6SGa/0S+jjXrIsfmL+a5FbU8ZQqfBNP5kSo1I7o5+ijuQeo6j0orpMwooooAKSlooEJRRS0hhSUtFACUtFFABRRRTAKKKKACiiigAo7Vd0fS73WdQistMt3uLmQ/KiD9T6D3Ne4aB4C8P8AgXTk1nxdcwT3aYI8wbokb+6i9Xb3x+ArixeNp4bR6yeyW5tSoSq67Luec+DvhprviQJP5QsbBuRcXII3D/ZXqf0HvXqFv4N8AeBoVm8RXUN1dgZxdtuLf7sI/qD9a5bxF8Vda8Q6guk+D7aW1WdvLjcDdO/07IP85FY9rJ4a8K37S69cXGu6+cl5IFWWG2f6ucSOOeTkCvNq/Wq38V8q/ljv82dUVSh8Cv5s9dfx1ZQaH9psLa30q1fC2TakfIS4PcrGgLBR/exiuPv/ABh4yun22viHwfbRsfl8i5ViP++8n9K4yd/DPivVQ0+t+JW1K4YIpns0nJJ6KAjDj2ArqLLwdB4X+1/2DfaXrfi6N9scc0qxm0GM7ljY/PJ+PFYrCUKPT3n3X6sv2s5+nqa1s/iCw1EDxl4+tLTCCVbOG4WN5cjgE7BtU+uCatXviK51Ozm8/wAbaLpN7ET9nksLwvE4/uyIwz/wIHPtXh/iPTtasb+WTxDaX0N1I255bpDlye+48H86y41aWRUiVpHbgKoyT9BXbHLoTSm5K/klYweIlH3bfie4z3/xF0cwG68VeH2jlXfE1zPGFkX1UlRkfSuk8M+Or37RHb6/rHhWaSTKotlcvvdscLnGwZPGSRXnngjRNdGmmx8T6esfhOY7n/tKZbcwH/npCW5DD0Awara14E8OaFaw3994lurrTblm+zSWFmJAwB6Fy20N7VyTw1CbcKlr9Gl/kbRqTS5o/iz0rUtU8CeJrqTTfFGmjTNWX5WW+j8iQH/ZlXg/XODXJeLPghKkRu/Cd8LmIjcttcsAxH+y44P44+tYy+JfB1xpK6Vqx8QalaINsE08cXm23ujA5x/snIqCHU9d8Dwx6j4X1n+1fDMr7VLKTGrf3JIzzG30xminSrUX+4k15S2f+QpShNe+r+m559qVheaXePaajazWtyn3o5V2kf4j3qtX0TpXivwp8TbNNL8Q2sdrqRGI1kbBLesUnY/7P6GvM/iN8NtR8Iu13AWvdHJ+W4C/NF7SDt9en0r0MNmHNP2NePLP8H6HPUw1lzwd0cFRRRXpnMFFFFABRRRSAKKSloAKKKKACiiigArT8OaHfeIdVisNNhMkz8kn7qL3Zj2FU7CzuNQvYLSyiaW5mcJGi9STXvdp/Znwp8H7n2XGr3XXHWaT0Hoi/wCeTXDjcY6CUKavOWy/U6KFH2l5S0itzV0nR7f4eeHD/ZNmdQ1KbhpGKoZW/wBpiQEQen8zXnfiixkn1H+0fiTrKxS7d0Wl2JEku09AP4UX3OSat+KNXi0zTdD1LXR9v8TtbvcRWsy/u7cyOWEjr7DaFX2ry95bzWdXDSySXN9dyhdzHLOzHArz8Bhql5VZy3vd9fk+3mdOIqx0hFfL/M9PXxHD4a8EnU9A0iz0y41CcwWLFfNl8pPvyOzdck4A6VyCeP8AxXI6RRagS7kKscdrFyT0AAWu18Qf8I5fa3Y+HoNP1nV7vSoVso7a1kWOIsvLtnBb7xOTx0qtrmt6F4IRYfD+k6efEwz5kyyNcR2me29vvvjrjAFaUnBbU+aUu/4b62ImpdZWSLtxq3iXT9KXT7eCTVPF9wMvJbWaf8S1CPu71UfvCDzz8tcfF4FvIf3viXVdM0YE7mFzcCSY+/lpk5+tN0vxRqvibWobHxF4pudN02XcZJI8RoODgYXA5PGTUHhzRtMPjldH157w2zzNArwLtkdicRtz0ByD9DWtOEqPMnZPd2V/u6Eykp2a1R2WheKNO0ea30rRLvW/E9zcMIY7e5cRWjMeB8jBmx+VXdU8TXPg7UJNP17w1aaUbpfOS60KRY5ApJHBIIJGOelcD4N8P6pcfEG10+zFxa3dvc72d1w8Co2SzDp0H0JNdr+0Vpd8msWWqs7y6dJEIEz0hcEkqfZuv51z1KdH6zGm3fmV/Py20LjKfs3Lsc9qWj6R4mmNxp3jEtdNz5GuBonJ9PM5U/pWj4Sj8VeA7lxeaTPf+H5zmcWwW4jHpKhGQGHv16GuW17SbDT/AAz4fkEd/Dq95E89wk4xGY9xCMvpnH5Va1OJfCmjaRdaL4gv7fXZxuu7JC0fkKRlSfqMdc5zXTKPPFQTunpqu3mvzM07Pmas0avi/XvFuhXUM9rrsl1o92C1ndLBGA6/3WG3hx3FL4M+JGqf25b2fiB7a80m7cQ3KyW0Y4PAY4AzgkHn3qvo/wATL+fbY+Lra21rR5G/fRvCqyD/AGlIxlh7/nWz4i0XwlHZJq1lot9Nocp4vtMvMmI/3ZI3B2MPris3BRj7KvT1ezVv+BqUm2+eEvkzL8RWXhmbW7vTNQt38M6vbymMzQAy2jkHhin3kB4ORkV6b4LvvEWnLDo3ieO21fTbiPFvfQTpKWjPTcpO5lI74yO9eY/FQWmqWGheJNMeWWG4h+xTvMoEnmxDALgcZK/yrD8L69b/AGVdF8QiSTSS++CdOZbCT++n+z6r3qKuGeIw6trbp1T8uvyKhV9nU1/r1Oq+LXw0bQmk1fQY2bSid00A5Nt7j1T+X0ryqvpS38XPo3jW40XXXE2jaoFmsLt+Uw6jKknqhOR7Z9DXlvxf8D/8IvqovdOQnR7tjsH/ADxf+59PT8u1Vl+LnFxoV3q9n3/4JOIop3qU/mee0lFLXtHEFFFFABSUtFIAooooAKKK2PCOjPr/AIistOXPlyPmVh/DGOWP5fzqak404uctkOKcmoo9S+Dvh6DSdGn8UasVhZkJidxxFEOrfVv5fWsfxrq8ena9Nqeq+Ve62o22NiDvhsk6q8h/ic53Y6ZPNb3xG1FbvUtG8HabiOOeSLzwp4WPI2p+QJP0FcnrWnWmo6xf+JNfme20ea4YWsEf+uu1X5QEHZcAZY189h061R4is/iTsvLovmenUfJH2UOhW+IkV/rnj17a2imvLwW9vGRGpZmPlKSSB05Jrc8F+EYfDt7Lr/iK+tl/shPPks4GEsiMchdxHyhs9Fz1rP8AiT4i1ODxNfaXpji0tm8vcLZNsk+5FxvYct1xis3xdOuhaDa+F4WBuywu9TZT/wAtSPkiz/sjr7muyKqVKMKS0TXzt19DB8kZym9bfmRav42ZYrm08M2x0qzuGJnmL7rm5JOSXk7Dn7o4rkC26n21rPd3EcFrDJNPIdqRxqWZj7AV6Z4e+DWsX0SS6pdwacG58rHmyD6gEAfnXXKrh8FG0nb82YKFSu9Fc8uIr3/4K3uleItMto9agt5dZ0Nh9nuJOH8rnZz3xyOfasy5+BreWTZ66jSgdJbYhT+IYn9K4TU/Cc3hTWYI/F9ndf2XI237TZOMH3UkHkf3Tg1x4ivhsfTdOnP3vx/4JtTp1cPK8lofVIkslneYNarO6hWkyoYgdAT1xSTGyuovLujazREglJSrKSORwfSvLtO+DvhO+tILy0v9TmtpkDo6zIQwPT+Gr3/ClvDO4A3Gq8/9Nk/+Jr5z2eGT1qO6/u/8E9LmqPaK+86Lx1J4fsrBvEWp21pd3OmRMbYOwb5jjaoGcH5sduK+UNQvbjUr+4vb2QyXNxI0kjnuxOTWh4x0SXw54mv9KnLMbeQhGP8AGh5VvxBFY9fVZdg1h4cylzX/ACPKxFV1JWatYUcVreHvEep+HrpptLuPLDjbLE43RzL6Op4IrIorvlGM1yyV0c6bi7o9h8N3Hh7xvoWo+H4rWTRb2Y/btiHzYFdPvNGOoyOq+nSuD1/wjqejW63gWO90x/uXto3mRH6kcqfrWX4e1afQ9Zs9StD++tpA4B6MO6n2IyK6/wAUXd14c1mHW/Cl3LBpGsIbmFRzHk/6yJ1PBwc8HtXnqnPD1eWm9Hqk+/XU6XKNWF5LVGt4h161l0PwvY+IoXm0e90qNlmjAMtpMhZDInqMAZXvXovhqCPXvBy6B4gvrXURcwN9kuYny1xApAEmDyGU8HPOR9a4TxHBpHifQPCseoTQ6Rq1xZtJauibbTJkOY2H8GTyD0GTVG6uNR8N6J4fvpIXh1Pw9eyWU8TfxRyfvF57qw3jI4rzZ0VWpqMfdld/frZr8jqU+STb1Vjz/wASaNdeHtbu9LvR+9gfAbs69VYexHNZte4fGzTLfxB4Y07xXpg37I18xgOWhfoT7qxx+Jrw4V7GAxP1ikpPdaP1OHEUvZzsthaKKK7TEKKKKQhKWiigdwHWvYPgrpsVno+qa/djavMSMeyINzkfjj8q8ePFe63Njd2XwtsNH06JnvLtEhIXoC53OW9BjOTXlZtP93Gl/M7fLqduCj7zn2RyXhF7i61rWvGt7Hvt7JJZgjfxyEYVB7AEZ/CuL1rWLvWNQa7vpN0hAVVHCxqOiqOwHpXdwXdtcDVvD+lPvtLTSZo0Yf8ALeYEPJIPXO3A9gK5vwxo1ulvHrevKRpiybYLcffvZOyr/sg9T+FOlKMHKpJa2SXe3QJxcrRT9TufFlvBoOu3nirUER5ikSaZbtz5kwiUGQj+6n868euJZLi4lnnkaSaRi7ux5ZjySa7D4t373vjm+QsTFbBIY0B+VMKCQPxJrjq6MBT5aUZy3aX3djHETvNpbHtPw0toPCvgGfxT9ia/1ScYhjQZZV37VA9ATkk+levLdm205LvV3t7VljDTtv2ohwM4J7A8V5FoFv4j8E+ErDWUvxcWKRiS50u5CpsRjn9y/UNg52ngnNcd8UfHDeKr+KGyeVNJhUFY34LyHqzD9B9K8CeCnjq7d7q71/Q9GNaOHppdbbHvum+NvDmoXyWdnrNpLcsdqoG27z6AkYP0Fauq6daazpk+n6nEJrWZNrqw/Ue46g18aqTkEEgjkEdR9K+svhzqU2reCtHvbti9w8O1yedxUldx+uKwzHLfqKjUpyZWGxPt7xkjnfhPLPoWsax4Mv5WZrNjPZuf44z1x+an8TXpueAcce1eJfFjVW8NfEjw7rkPUQ/vsfxoGIYf98sa9nt5VnijmhcPFIodWHRgeQfyrmxsG1Cv/Ovx6mtB2vT7HjX7Rnh7zLew8QwId8eLa4Pqp5Rj9DkfiK8Lr7O8Q6TFr2gX2l3IO25haPJ7N/C34EA18b3ttLZXk9rcKVmgdo3U9mBwf5V7+R4n2lF0nvH8jzsdT5Z8y6kNFTm0mFgt6UP2dpTCG/2wASPyIqCvbTTOK1grsfBV9a6hYz+FdZlEVleP5lpcP0tbnoD/ALrdDXHCioq01Ujy/d6lQnyO56F8UrG40rTPCWn3kfl3Fvp7RyLnOCJD+n+NXPCGoXvjLwvqfhO5HnXUduLixnf7w8thiNj3HJA9Mmr159g8T+B/CtpqU/k6rLDLFaX0rZXzEfHlSHsGBGD61zvhC0vNEk8WteRy2t1Zaa8RB4ZXd1Ax/Q15UWpUHB/HF6ffujsatUutmv0O6+Ctyur+GNZ8L6mCfIDL5bjDCN8gj/gLZ/OvE9TspdN1G6sZx+9tpWib6qcZr2HwTe/avF+l+J7BDs1BWsdVjQf6q428OR2V9oOfXNcp8b9OFj47mmRcJewpP0/i+636rn8anB1PZ4uUP5lf0a3CtHmoKXbT5HA0UUV7hwBRRSUALRRRSEWdMt/tepWlv/z1mSP82Ar3PxpqLWvivwnYRsRFNO6yAdGUgJgj05NePeCUEni/RlIyDdRn8jmvWfFOnvffETQ7mZ/IsrNVdpWHBcyHag/2mOPw5rw8xaeJgpbJNnp4RP2Umu6OK8G2MPh3Uo9c1mVobNZ3traIDLXOSUY4/uAHk0+SC81P4q22nakymO1ugqIg2xxwJ842joBtArmvGeoXWoeI757x93lSvDGoGFRFYgKB2rt7K7hl8MS+LXkH26DTm011/iMxIRX/AO+DWtRSglVlvJW9L7GcWpXgtlr/AJnnWv3n9o65qF6f+Xid5PwLHH6VFpV5/Z+oQXfkRXBhbeI5gShPbIHXB5qrRXqqCUOTpscTk2+Y2vEXijV/EUwk1W8eVQcrEvyxp9FHH49axaKSiEIwXLFWQSk5O7Y5EaR1SNSzsQqqOpJ6Cvrvwjp/9jeGtL04j57e3VGx/e6t+pNeF/BTwwdW1/8AtW5TNlp7Bhu6PL1Ufh978q98v72HTrG4vLxikFuhkkbPYc18xnmI9pUjQj0/M9XAUuWLqPqeFfH+9W48X21spB+y2qh+f4mJbH5Yr0j4G68dW8GpaTMTc6a3kHuTGQSh/LI/4DXzzr+rS63rd7qVznzLmUyYP8I7D8BgV03wo8TJ4a8UpJdymPT7lDDcHnC91bj0I/Imu/E4BywKpJe9FX+fU5qeItXcnsz6lB5HDYPavnL43+HxD47il08CWbVEWQwJy/m529P9rg/nXaan8Sb3W7htO8AabPd3HQ3kybUj98H+bY+hrZ8CeC/7IvW1jXLn+0tfl5aZ8sIs9Quep9/yxXj4Ryy+Tq1HZ226v17HbVSxC5Y7dzzr4meH08L/AA38OaY+03f2p5pmHdynzY9hwPwryivUPj5r0WpeJrfTrZw8enRlZCOnmtgkfgAB+deX19Jl3O6ClU3d3955uKcfaNR2QUUUV3HOdlD/AMTD4VSjOZNK1IN7iOVcf+hCussb8ar8O7TT/EV6tve6rI0Fldugy0cRBQTN1K7yQD2rlfhko1G61bw+7qo1azaOIseBMh3of0NVfiNeRza+NNtT/oWlQrYw46HaPnb8WzXlzp89V0trPmv/AF5nYp8sOf5f18ja04XvhTwneNMslrfjW4IZV6ErGpfHuDnPoa6L9oi2V00K/Xv5kJPqOGH9azF+1+K/hVbwSzLJqdrduLdSPnuUjjBK57sFbj1C4rf+NuZvAGhzv98SxE5GCMxHNcV39apyl8XM0/uRva9GSW1keGmiiivojzAooooAKKKKQG34IfZ4w0Zj2uk/nXrvim/jTxpo2l3qn7JOUlhZesU6udre4PQ+xrxLR7j7Jq9jcZwIp0fP0YGvZvHNmZ/GfhG6Q5UXJVm7DGH/AJA14eYxX1mDl1iz0sI37KVu6PJPFUUsHiTVEnjaOT7RI2GGOCxIP0IrtLawhTwJNoJQ/wBpyWZ1g+oIYbVx/uc/jVTRZLTxjq0enaqzLcpOxtblVzviDFjE/tjOD2oi1C4h+LBl1CJoBNcG2aJhjETDYo+mCK2qSlOKg9HFX+7YiMVFuW6ehwFFWNRtmstQurVxhoJWjP4Eiq9erF8yujhas7BVvSNOudW1O2sLFDJcTuEUenqT7DrVTGelejeFLmLwbAPJs21DxZegCO2UZFqh5AbH8R6kDpxnFYYms6UPc1l0/rsaUaanLXY9p8OaZZeF/DtvZpIkNtbpmWaQ7AzH7zE+5/pXmfxY8WJr0UOg+GZJL1XbdctApbzMfdReOR3OOOlaVj4K1fxFcJe+OtSlZSQVsIG2qvsSOB+HPvXomi6Tp2i2yw6TZQ2yHr5a8t9W6n8a+SjVo4ep7WT55/hf9T2XCdWPKvdj+J4HoPwp8R6kUa7ij02Fv4rg5fH+4OfzxXpnh34S6Bp6q+pPPqUw5Ic+XH/3yOfzNd7NIkMTSzSKkKjLO7bQo9c1xWv/ABQ8OaTlIbp9QuFyNlqMjPux4/LNXLH43Fvlp7eX+ZCw1Ciry/E7iytLaxgW3sbeK2gXhY4kCqPwFcT468bmyf8AsXw2pvdfnOxEjAYQE9z23D07dTXEWnjrWfHevQ6HZ3UWhWtzuG5MtI2BnG7jkjPTFep+EvCGk+GIT9giL3cikSXcvMj+v0HsP1rOeHjhHzYjWXb/ADZaqe2VqWi7/wCR85eN/DV/4Z1SKHVJRNNcwrcGUEkEtncM9yD3rna+i/jnoP8AafhFdQhQm505vN9SYjgOPw4P4V8519NluK+s0FJ7rRnk4ql7KpZbC0UUV6Bgdn8LVjtdZvNbuU3waPavdY/vP91Bn1yaoeP7JLTxPPNbc2d8q3tufVJBux+ByPwq7ZH+z/hbqEoOJNU1BLcf9c4l3H9SK6HTdNtLv4d6XrPimK4FrpUskcKKMNeRMQUTPZd+Rn0zivMlU5KrrPvy2/rzOpR5oKHz/r5DNEn/ALA+GllrFxA/2xb+V9NDD5S7RhfMPsu1sepxXTfHB2/4QHRhKxMrTxls9SfLOT+tcjc6hd+L/ChaYKJF1qGJIYxhIYnj2oqjsBjFdF+0LdBLPQ7AHndJKR7ABR/OuFxbxVO/xczbOi9qMrbWR4tRRRX0R5gUUUUAFFFFIBCMjivdb/VbmT4fafrdqFkeBI5JUIBDL9yRT6dTXhdeufCe7i1TwxqWiXTZ2bsL/wBM5Bg/kcn8a8nN6a5IVf5Xr6M7sDL3nDujGs9Ph0m+1DU9NZmsJdKmubRj1TdhSp91JIrN0TUotcW007WJ/LvYGX7Dft1Ug5EUh7qex7Vc8IvcMdY8I3WBPKk0duzfwSD7w+h2g/hXFXVrPaXMltdRvFPGxV0YYIIqqcFVcoyeqtZ+Xf8AzFKXKk0tOpvfEu1Np431Rdu0SOJf++lBP65rma9S8awwa9ezaSEVdXsbeOS0fvOvlqzxH37ivLcEcEHPpXRgavNSUZbpf0zHEQ5ZtrZmn4Zsr3UdbtrbTI992zZQkcJj+I+gHXNfRPhLwpY+HbYMgNxfyrme6f7zE9QPQfz71hfDDw0mgaKk9xH/AMTC7UPKcZKDqqe2Op967G6vbaxsprq8lEVtCu93Y/dH+NfOZnmEsRUdKl8O3qerhMMqUeee5YnnjtYGmuZFjhRSXdztUDrye1eZeKPi7Bbl7bw9CtzIOPtUwIT/AICvU/jgVwXj7xndeKLoxIXg0uM/uoM/e/2n9T/KuQxXdgcljFKeI1fY5sRj23y0zrry517xRbtfapfhrMPsDXEwiiDeirwO/YVL4q8I3cM1/qWmWqf2RGVZRHIHZEKjBIGev3voc1qeCdT0u/0u207UI5lu7Ft6KJm2XEHO8BTkBwCW4HOK67xHqeneGft8xu765VP3Fjam7c+ZKV/euTn7gBVfqCBXRLEVKVVU4Rt5W0sZezjKHNJnimm3UtjqFte2zFZreRZUI9Qc19d6NqMOraVZ6hak+TcxLKMnpnqPqDx+FfH0j5YkADJzgdBXt/7P+um40y90WeQ7rY+fCD/cb7wH0bB/4FWeeYfnpKqt4/kPAVeWbg9meszRR3NvLbzjzIpEKSKejAjBH5V8j+J9Ik0HxDf6ZLnNvKVUn+JOqn8QRX14MggEDjtmvGP2g9Ax9g1+BDz/AKLcHH4o38x+VebkmI9nX9m9pfmdePpc0OZdDxeikrpvBmjW15JcaprJZdE08B58cGZj92Jfdj+Qr6ypNU48zPGjFydkdetnpen/AA98M3+uHzbeETTxWKnDXUzt8oPogA5P4Vl6TrV74ksvGA1KTfv05ZY41GEi8uRSqovYAHFN+KWoNqlt4XvTFHAs1gzLFHwqDzGAA/ACn/D5ZPD+h614mvbbzLMwC2t0fpPIXX81BAzXlRhy0fay1k3p9+x2uV6nItkv0Om8BWraPrmleHbYIbyZft+rOVDbAFzHCM9CMgk9cmua+Ol/9q8bi2Ugizt0jOOm4/Mf5iut+CELmDW/FOrSs0kxZTK/Uhfnkb88flXj+v6i+r63fajLndczNLz2BPA/AYFThYc+NlP+Va+rHWly0FHv+RQoopK9s4BaKKKACikpaQBW74J1o6F4jtbtiRAx8qYf7DcE/hwfwrCoqKtNVYOnLZlQk4SUl0PWfHdgdG8VaX4ltBmCSVFnI6Z6Z+jLn8qxdeeyudYutJ16Qw3VtKY7XUQN3ydVWUdxgjDdRXQ/D/VrfxL4Wn0DVTvlgTaATy0XZh7qcfpWB4x0tNW1y9Fsrwa1Dy9pI24XCAcPE3c4A+X614OHlyT9jV0cVa/l0f6HqVI80faQ2fT8yv8AEe21Cw8XPqkcckcP7toLhR8uVRR17cjoal0e007xJ490qe2jCRzILq9hx8qSLksB7EgH/gVReKNc1DSfFE72sp8i5hhke3lXfG+Y1yCp4rV+FM0N94vv7uK1is1FtxFGTtUllzjPrg/nW9Rzp4T2j3UdGv1MoqM63L3Z7CPmYEbjkZ4715B8Z/ELS3EOh27kRxgS3GD95j91T9Bz+Ir1xCMpuYk/eJ6HFfMXiC9bUdcv7xzkzzO+fbPH6Yrysjw6q1nUl9n8zrzCo4U1FdShRRRX154g6KR4pEkiYpIhDKw6gjvVjUdQudSu3ubyTzJX6nGAPYAcCqtFLlV+a2oX6CV1Hw11WXR/Gml3EedryiCQD+JH+Uj9c/hXMV3fgrVfCGhTWuoXsGq3WpRYbaUTykf1UZycds1hi3+6kuVyutkaUV76d7H0oflbjJHQnNZniTSode0S80u5OIriMr0yVPZvwODXBf8AC5NBYDda6mcf7Cc/+PU5PjHobSARWGqMxzwsSEn8N1fGxy/FwakoNWPbeIotWcjxDUNEu9M119JvwsFykgjZpDtTk8Pk/wAPfNbvi67gc2fhvw9un0+yON0QLG7nP3pMDr6D2rtfEnj/AMFeJIU/tXQ9SnMfCyhVVl9gwbj6VwF3rsGl6pNN4Ma90+2liEbecytIPXB5x/PrX1FGpVrWdSDUl32ueTOMKd1GV0/vOx1vS9N03w/4Wn8WtKstpZMg0tOJZ28xmAZuiqMjJ69qp61d6h4h8NaNZqi/adZvWMFtENscMMXyIqjsoJY/hmotZ0efVNP8PPfXP2bT7TTVnu76bLbTI7Ngd2c8YFej+B7fSoNFs9dmtZbOz0+1kjs5bqTc5hJ3NKwAwCxJxjsa4atZUYKb96V3+trfM6Y03OTitFYxPiddQeEPh/Y+G9PkHnXMflEjglBzI5/3jx+Jrw6t3xt4hl8TeIrnUJAViJ2QRn+CMdB9e59yawq9PL8M6FL3vier9WcmJqqpPTZbBRRRXcc4UUUUgEpaSloAKKKKALek6jc6TqMF7ZPsnhbcPQ+oPsa9f1G0tvHegwarpMvkatbnKNnDI45KMe3PIP4+teK1ueEvEd34c1IXNt88L4WaEniRf6H0NefjsK6tqtLScfx8jrw9dQ9yfws6nxNpk3iKysL05XxCIXiuLVhgzGI4baP7wGDjuDxUXwduBb+KLiGTgzW7KAfUEH+hr0CY2HinRYNQ0qG3urmI+ZF5zsjRvxlSUIKtwOenSvNtW1+O38W2epNpMmm6nbzf6bGHysg6EgY4JGfXPBrzqNWWJoTw1uj+X/AOqpCNKpGrf/gntspLwOo+9sYAA9Dg14Jp/hG61Xw0+paYWnuoZWSa2GNxUdGX+oP4V77ZyJLBFLA/mRugZSMYIPIwfxr561+O78OeL71bWWSCWKYvE6nGVPzL9Rg1y5K5XnCDtLR/8A2zBK0ZS1RiXVpc2jbbu3mgb0ljK/zqGvU08TarrWlPeaPcK99bruvNMmQSpIo6yRhgTj1UVy417Q79j/bXh2GNj1m05zAw/wCAHKmvepYqo7qUNVvZ/wCZ5k6UF8Mt+5ylFdpZeEtP8ROR4V1Z3mAz9mvYGRh7b1ypp0Xw21iKCS51eS206ziOHldvMP1Cpkn9Kv67RWjdn2e5P1ep0RxOKVMs4Rclj0A5NdWk3g/TMqkN/rlwvGZG+zQ59gMsfxra8L6vres3/wBj8NWGmaNbIN81xBahjCncl2ySfT1pTxUlFyUdPPT/AIP4BGjd8revkYGgeC9Z1i4jC2ktra9XurhCkaL689fwrr76y03R7KXTtJ13S9MiZdtxes5murj1ACA7F9gfrWH448RajquNLt11E6ZAcbrhW8y5bu75H5L0FZng7wrfaxrlpDJZXKWQffPIYiFCLyQDjqegHvXNKU6kfaVpKKXRGy5YPkgrvuaHjeO10TQdH0Cwn+0BwdQuJthQuz8JlTyMKOnvWN4Z8Pvq7vNcTC00yAgXF044XPRVH8TnsBXQ+JNPtZdfvNU8V6glp5r5j060xLcBBwqnHypwB1P4V2/gOzTxDb2R/wCEehs9As2LWxuJXd5Xz94AEAn1Yg+gqJ4r2GHuvm/X8ylS9pU1Gf8ACOXPi3xYLK68xPCuibbeKI8Cd0UAj3OeCfTgda534w+NEv5f+Ef0ZwNOtyBO0fCyMvRBj+EY/E/Stj4p/EJLaGbRPDkqiVsrc3MXRAeqIR39T/WvFqzwGFnVca1ZWS+Ffq/MeJrKF6cOu7/QKKKK9s4AooooGFJS0UCEpaKSgBaKKKACgUUUAanh7Xb7Qb8XWny7SeHjblJB6Ef1r1i1u/DnxFsRDdJ9m1ZF4XIEi+6H+Ie38q8Tp0btHIrxsyOpyrKcEH1BrhxOBjWftIPlmuqOmjiHTXK9Y9j6F8FabqmiW76XqLrNbQgta3SHgof4GHUEdR9evFYHxg8Om+sI9Ws0LXFou2ZRyWj65/4Cf0PtXOeGPijf2Cxwa1F9vt14EoIEoHuejfjg+9enaF4o0fXkUWV7G0hBDQSYST/vk9fTjIr5ypSxWCxHt3H7tn3PUhOjiKXskzxnQk0LT57a/wD+Eiv4LqPD7beyO5T3G4tg+npXRz3Gg6yl7qXh3RIr7VYz5kttdZXK45lSJThueozVrxx8Oitw2oaDCXhJ3y2S/Kw9dnt7fl6VzmmahpcF+h0zwtfm9hO5WS/k81SOvAWvXjUhiY+1pybfql8nscbjKk+SSSXzMi/8Xa1eRmH7Yba26CC0UQIPbC4/Ws7T9X1LTZvNsL+6t36kxyEZ+o6Gu5lfw54i1gvrGlX+kXUgwXV9sbv/ALfy/KT64x60698O+GtKtZJdbtdUsmyRBCl0kslwfVQFwF/2jW8cTRiuSVPV9LJ/8OYujUk+ZS0KPh/ULjxRcSJrWlabd2sC77nUHT7O0Cf3i6YyfQY5NXLrXPDc2nR6Vo2o6tolrBIX8yOAP9obs7sGDfQdvSlfU7bU9Ng0vT/BuqyWERysMU7qHb+8+1fmb3JrY0HwFbahcxSXXhW/06EfN+81AMrY7MpG4An05rlnUpwvOfurorr8rm8Yyl7sdX8yjpsV/LYTXsPxCvI9OiOHnlimVQfQFjy3sDmqeoeJtU1xBoXhR9WvUY/vbqV2aef3POI09vzNd3N4EtZlju/Geqp9kgX91aW5FtawL/dGefx4JqhqHxJ8NeF7NrHwlYx3DjI3Rr5cWfUt1b/PNYwrqpL91HnfpZL10VypQcF78uVfiVvC3w0sdEgOreNLmBhF85gL/uk/32/iPsOPrWN4/wDifLqMT6Z4c3W1gBsacDY8g6YUfwr+v0rifFHijVfE1152q3RkVTmOFfljj+i/1PNYld9HASlNVcU+Z9F0RzVMQkuSkrL8QooFLXqHIJRS0hoAKKKKACiiigAooooAKKKKACiiigYUUUUAFHcEdR0PpRRQB0Ok+M/EGlqEtdTmaIdI5sSr/wCPZq5qHjI6u6y6tpVq12vS7tHaCUH1yMg/iK5Kiud4Wi5c3Lr9xoq07Wvod9onxS1vTSsVxt1G1U/duT+8x6bx1/EGupT4v6YArto10ZccjzEx+BrxiiuepleGqPmcfuNYYyrBWTPYrr40tsxZ6N2xma4P8gK5rUvit4lu9wt5bazU/wDPGLLfm2a4KiqhlmGhqoffqKWLrS3kW9T1O+1SbzdSu57qT1lctj6Z6VUoortjFRVkrHO23uFFFFMQUZoooAM0UUUDCiiigQUUUUxhSUtWtKsZNT1K2soR888gQew7n8Bmpk1FNsSTbshk9nc29vb3E8EkcFwCYpGGA4HXFV69e1+2tPEHgWYaav8AyDHYRAc8R8ED6rzXkPvXJg8V9Yi21Zp2sb16PsmrbMWtSHw7rM8SSwaXeSxuMqyRFgR9RWXXffCLUJLLVNRLySNZxWUlw8IPBK4OR6HrV4qrOlTc4K7RNGEZzUZdTg5EeN2SRGR1JVlYYII6g0iI0jqiAs7EKoHcmvU/iR4fg1mxTxJ4fAlV4xJcKg++v9//AHh0IryujC4mOJhzLR9V2Y61J0Zcr26G6vhDxEwBXRL8g8giI4NY91by2k7wXMbRzRnDIw5U+hrtdG1K+h+FespHdSqi3sUS4Y/KjDLKD2BxXDMeaKFSpNyU7aOwqkYxS5eolTWdrPe3MVvaRPNcSttSNBlmPoBUNeg/CdbbSbq48TamP9Fs3S2i95ZTgkf7q5NXiKvsqbmld9PUVOHPJRODubeW1uJYLmNopomKOjjBUjqDUWK9J+Omi/YfFMepQL/o+ox7mI6eavDfmMH8683pYauq9KNRdRVYOnNxZJa20t3cRwW6GSaQ4VF6k1rz+EvEMELzTaLqCRIpZnMJwAOprENfQfwm1xR4R0Sw1GR5WvJbmCJnbPCYOz8ifyrDH4mphoKcFc1w9KNV8snY+e6K3/HWgt4c8U31hg+QG8yAnvE3K/4fhWBnHWuunNVIqcdmYyi4txfQv6Vo2pau0i6VYXN4Y8b/ACYy23PTOOnSn6roOraRGkmqadc2iOcKZk25Ne9fBu1h0Wzt9IKj+0bu1/tO5PQoCwWND/wHJ/8A114f42uJ7vxdrElzK8ri6lQFjnADEAD2AFcNDGTr15U0rRX4m9SgqdNSe7MzTrC71K4+z6fbyXE5GRHGMkitg+CPFAGToGpAdf8AUmsAEoQykhhyCDgivePibqV43wd0RxcyCS6FuJmDYLgxliCfcgE1eKxFSlUhGFvedhUqcZxk30PCbiGS3meGdGSWNiro3VSOoNJBFJcTpDbxvLM52oiKWZj6ACmE4r1v4XWDaf8ADnxL4j0+MPrKrJDA+3LRKqqSV9/mJ/4CK1xNf2FPm3ei+bIpU/aSscdB8PfFcygpotxkjOxmQP8A98k5rC1XSr/SZ/J1OzuLSXss0ZXP09ah+1XP2o3JuJzck7jN5h359d2c11/inxe/iTwVpVrqExk1SyuWVmbrJHs+Vj79j9KOavGUeazT3t0C0Gna6ZxNFFFdJkFdN4VH9n6ZqmskYeOP7LbH/po/Uj6Ln865kAkgAEk8ADvXZ6tq194WhstH02ZYpYohLdHYrZlfnHI7DFcuKbaVOO7/ACRvRSTc5bIufCrVTbajcadNnybpNygjjevb8Rn8q5TxVpZ0jXru0AxGG3xe6Nyv+H4Vox+N9dWZXa7VgCCV8pBkenArp/iZp8d/oOna9ajcu0K5/wBhuR+RyPxriTnQxalNWU9PmjpajVoNRd3H8jzMV1nw8Yi71kDvpVwP0FcnnAxXUeADtu9YPX/iV3H8hXdi/wCDI5aH8RF34aeLzoN39jvm3aZcN82ekTH+L6Hv+dSfErwkNFu/7RsEzpdy2Rt6ROecf7p7flXCjpXqvw28R2+q6c3hbXsSRyIUt2f+Mf8APPPqOq1x4mnLDT+tUtvtLy7+pvRmq0fYz+TObsDj4W6x0x/aMH/oJrjq9G1/QLjw54J1u0my8LajC0Ev99Npwfr2PvXnVdODqRqKU47N/ojGvBwtF7pAK7XxqDpGg6L4ajB8yGP7beAd5pBwD/urgVnfD7Tor/xLDJeD/QLFWvLknpsj5x+JwKv3fxK8TT3U0sN+IY3csiCCM7FzwMlc8ClWc51VGCvy669+gQ5Ywbl1PQbhP+E3+DKOVL6npqZweSXiHP8A30h/OvDMgjNez/CLxzqWreI5dM127E6XMRMP7tVw68kfKBnIz+Vec/ELRP8AhH/Ft9YopFuW86D3jbkflyPwrmwLlRrTw81b7S+e5tiEqkI1Y+jOeru5b2bTfh34SvbY4nt9TuJUPuNprg67LWQf+FW+GvT7bdH+VdmJSk4J9/0ZhSdlJrsdz8ZLSLxF4S0nxTp67gqKJCP+eb+v+63H415v4E0RNb8SW8F0dtjADc3TnosSctn69Pxr0j4KX8Os+GdV8LX5DJsZowf+eb8Nj/dbB/GuSu7Ofwd4N1KC5Bj1TVrlrMdiLeI/Mw9mbA+ledhpyoqeEvqnp6P/ACOqrFTar9Ovqjr/AIPay+ufEnX9RlyFntyUTsiB1Cr+AArynxf/AMjZrX/X7N/6Ga779ncZ8V6jj/nyP/oa1wPjHjxdrYP/AD+zf+hmtsPFQxk4rZRRnUfNQi33ZkdjXtfxPwPg74ax/wBO3P8A2xNeJnoa9u+JyE/Bvw2ew+zf+ijVY7+NR/xE4f4J+h4kOa9H+EXjuHwtcXFhqgY6VdsGLqNxhfGN2O6kcH6V5xV65025tdOsL2UL9nvQ5iIPPyNtYH05rsxFKnWh7Op1Mac5U5c8eh7N4s+GekeIoP7V8F3cETSgv5QbMDn/AGSPuH26fSvGNY0q90a+ez1O2e3uE5KuOo9QehHuKt+G/EOpeHb0XOl3DRkkb4icxyD0Ze/869f+KD2nij4VWXiIRLFPH5bx+q7m2Ome4zz+Arz4Tr4KpGnUfNCTsn1R0yjTrxcoq0keEUUUV7BxHS+C7bSo72DUNX1K3iWF9y2xBLMR0J4xjvVfxgsMusXN5b6hb3iXMrOPLJ3KOwII/D8KwqK51Qaq+15vkaureHJYdGu+RF3KgYgbmOAPc16ppGp6Fb+Dxompa1bThldGMe7ADHIxkdq8poqMVhViUlJ2troOhWdFtpXuWdTtorO6MVveQ3kWMrLDnBHuD0Ndh4Fj0WwS7n1TWrVHurVrcRIGLRhwMknHUegrhqKurQdWHI5EwqckuZIu6rZRWNwI4L+2vkIyJICcfiCBg1TR2R1dGKupDKynBBHcUgBJwBk+gorZKys9SL63R6D4j8Zw+IPh8lndvt1aOeMOvaVRn5x/UetefKMkDIGTjJ7U4I56Ix/A03BzisaFCFBONPZ6l1asqjTkenaNF4b0/wAF6rpy+JLL+1dRQK8oR9iqCCEztzjrk+/tXm1zEILiSJZY5grECSIkq3uMgHFR7SDggg9MEc0YOcYOc4x3oo0fZOUua99QnU50la1jo/AQt4vEdlfXeq22mxWcySl5d25wDyFAHPHHOOtehfFa68K+LLe1ubDxBYw6lbKUHmK4WVDztJC8EH+ZrxnB+lP8uT+4/wD3yayrYRTrRrczTRcKzjB07XTJNPt0uruOGS5gtUY8zTkhF+uAT+lem6za+GLnwJpejWnimw+22Mjy75FcJIX5YfdyO2PpXlYBoIIPIwfetK1B1XF81rakQqcqate50PgzWP8AhHPFtnemQNBFIY5mjJIeM8MR68cj6CrvxR8Rp4m8WXFzbOXsYQIbc9Nyjq34kk/lXI0pUrjIIz6jFP6vT9qqz+K1g9rLk5Fser/CC50Lwzd3Gpat4hsFkuIBGtum8smSCdx29eMYGa5T4iWenf25e6jpOs2WoW13cNII4iwkjLEk5BGMD1Brk1VmICgsT0AGSaOen6VnDC8lZ1ubVlOtzQULbFzSbCPULrypr+0sY8ZMtyxC/hgEk+1ezeM9S8Ma14CtNCsvEtglxaeVskkDhX2Lt544zmvDSpUkEEEdQRRRXwvtpxm5W5dgp1vZpxtuPuIxDPJEJI5QjFd8ZyrY7g+leiaHf+GNb8CWnh7Wr19M1C0keSC6eMsmWJPUducEHHSvNz1ozWlah7ZJXs1rdEU6nI3ZbnZN4OsoH3XPi7w+tqD/AKyKZpHI9kAzn2qz438W2l3oOn+GvD4lGj2QBaaUbWuHGecdhkk/U1wlFT9W5pKVSV7bFe1smoq1wpKWiukyCiiigAooooAKKKKAN7wHj/hL9MyMjzDx/wABNYTffb6muk8B2s39tQ6ky7bGyYvPOxAVBtPGfU+lc2xyxI9TWMXetL0X6mkl+7XzPRdTn1WKy0Yafrlrp8P9nw/uXuRGScHLYx3rzyaR5Z3kkctIzFmfPJOeTXRXGoaFqEFh9vi1NZre2S3PkNGFbbnnnnvXPXHledJ9n3+TuOzfjdt7ZxxmssLDlTTX4fqXXfM9Gd+YIrvxTpmvyKDbNp/9ozZHBkhXawP1dV/OrJgii8bP4l8tfsf9nf2wBj5fMKbdv/f2uXtfEaw+C7jRjCxuXlISfIwkLFWZPxZR+tSSeKFfwNHoZgb7Usm03GeDBu3hPX71c/sKt9P8Py7mvtIW/H5nNFmkl3ucszZY+pJr1Px5d67bazqX2TxHaW1nGoKWn2sLIo2D5QmOp54968qBwwPvmuy17VvC+uarc6jdQ63HPPgssbRbQQoHfntXRXg3OLtor9L9jKm/daOLPQ49K6b4iD/iqZcYH+j2/QY/5YpXNMODXX6xqnhrV7o3l1FrEd0YUQrGYtm5UCg8844rSpeM4ySbWu3yIik4tXOd0UA6zp4PI+0R5/77Fet62dTi1fxBdeIry1uPC6NPGIPNjlZWO4RIqryjZx1xjBrx/T5hbX9tO4JWKVJCB1IDA/0rpLfxRAviTXLm5tpJdJ1cyi4tsjdhiWVh23KcH86xxNGc5XitLfr0LpTjFWZzNjdT2N3BdWzmO4hcSI/owORXo00Ol2xPjyEQ+TMm63sSPu35yGXH9xSC/wCIFeaHAJwSR2JrXl1WJ/CVrpIjcTRXklyz8bSGRVA+vBrSvSc3Fx9H6E058qdzLnmkuJ5Jp3LyyMXdj1Yk5JplFFdNrGW4lFLR70AJiilooASjFFFABRRRQMKKKKBBRRRQAAnG3JxnpRRRTsIUUUUUnsAUUUUgCiiim9gCiiijoNhSd6KKaAO9LRRSQwpDRRQIUdKKKKBhSUUUCCiiikM//9k=" alt="لوگوی آنامیس">
+  <div><b>ANAMIS</b><span>معاملات و حساب شما نزد آنامیس</span></div>
+  <button class="role" id="role" aria-pressed="false" aria-label="تغییر نقش نمایشی">نمای کاربر</button>
+</header>
+<main>
+<section id="v-home" class="on">
+  <div id="board"></div>
+  <details class="card adm-only" style="margin-top:14px"><summary>ویرایش ردیف‌ها و قیمت‌ها (ادمین، نمایشی)</summary><div id="adm"></div></details>
+</section>
+
+<section id="v-gal">
+  <h2 style="margin-top:6px">محصولات ساخته‌شده</h2>
+  <div class="lbl" style="margin-bottom:10px">طرح را انتخاب کنید و وزن دلخواه را سفارش دهید.</div>
+  <div class="gal" id="gal"></div>
+  <div class="card" id="ord" hidden style="margin-top:14px">
+    <b id="o-t"></b><div class="lbl" id="o-i"></div><div class="imgs" id="o-img"></div>
+    <label for="o_w">وزن سفارش (گرم)</label><input id="o_w" inputmode="decimal">
+    <div class="prev" id="o-p"></div>
+    <button class="btn" id="o-go">ثبت سفارش</button>
+  </div>
+  <details class="card adm-only" style="margin-top:14px"><summary>ویرایش محصولات (ادمین)</summary><div id="padm"></div></details>
+</section>
+
+<section id="v-add">
+  <h2 style="margin-top:6px">ثبت معامله</h2>
+  <div class="card">
+    <label for="type">نوع معامله</label>
+    <select id="type"></select>
+    <div class="fld" data-k="w"><label for="f_w">وزن (گرم، ۱۸ عیار)</label><input id="f_w" inputmode="decimal"></div>
+        <div class="fld" data-k="ct"><label for="f_ct">نوع سکه</label><select id="f_ct"><option value="tam">تمام</option><option value="nim">نیم</option><option value="rob">ربع</option></select></div>
+    <div class="fld" data-k="n"><label for="f_n">تعداد</label><input id="f_n" inputmode="numeric"></div>
+    <div class="fld" data-k="p"><label for="f_p" id="pl">قیمت هر گرم (تومان، ثابت از لیست قیمت‌ها)</label><input id="f_p" inputmode="numeric" readonly></div>
+    <div class="fld" data-k="a"><label for="f_a">مبلغ (تومان)</label><input id="f_a" inputmode="numeric"></div>
+    <label for="f_note">توضیح (اختیاری)</label><input id="f_note">
+    <div class="prev" id="prev"></div>
+    <button class="btn" id="save">ثبت معامله</button>
+  </div>
+</section>
+
+<section id="v-bal">
+  <h2 style="margin-top:6px">مانده حساب</h2>
+  <div class="card hero"><div class="lbl">مانده طلا (۱۸ عیار)</div><div class="v" id="b-gold"></div></div>
+  <div class="grid">
+    <div class="card"><div class="lbl">مانده تومان</div><div class="v" id="b-toman"></div></div>
+    <div class="card"><div class="lbl">مانده زیورآلات</div><div class="v" id="b-jewel"></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><div class="lbl">مانده سکه</div><div id="b-coin" class="v" style="font-size:16px"></div></div>
+</section>
+
+<section id="v-stm">
+  <h2 style="margin-top:6px">صورت‌حساب</h2>
+  <div class="card"><b>فاکتور کلی (PDF)</b>
+    <div class="row2"><div><label for="i_from">از تاریخ (اختیاری)</label><input type="date" id="i_from"></div><div><label for="i_to">تا تاریخ (اختیاری)</label><input type="date" id="i_to"></div></div>
+    <button class="btn" id="i_all">دانلود فاکتور کلی</button></div>
+  <div class="card adm-only"><b>ثبت دستی توسط ادمین</b>
+    <label for="m_cust">نام مشتری (برای فاکتورها)</label><input id="m_cust">
+    <label for="m_type">نوع ثبت</label>
+    <select id="m_type"><option value="gin">ورود طلا آبشده (طلا به حساب مشتری اضافه می‌شود)</option><option value="gout">خروج طلا آبشده (برداشت طلا)</option><option value="man">تراکنش دستی دلخواه</option></select>
+    <div id="m_g1"><label for="m_w">وزن (گرم، ۱۸ عیار)</label><input id="m_w" inputmode="decimal"></div>
+    <div id="m_man" style="display:none">
+      <div class="lbl">مثبت یعنی مشتری بستانکار می‌شود، منفی یعنی بدهکار.</div>
+      <label for="m_gold">تغییر طلا (گرم)</label><input id="m_gold" inputmode="text" dir="ltr">
+      <label for="m_toman">تغییر تومان</label><input id="m_toman" inputmode="text" dir="ltr">
+      <label for="m_jewel">تغییر زیورآلات (گرم)</label><input id="m_jewel" inputmode="text" dir="ltr">
+      <div class="row2"><div><label for="m_ct">نوع سکه</label><select id="m_ct"><option value="tam">تمام</option><option value="nim">نیم</option><option value="rob">ربع</option></select></div><div><label for="m_n">تغییر تعداد سکه</label><input id="m_n" inputmode="text" dir="ltr"></div></div>
+    </div>
+    <label for="m_title">شرح (اختیاری)</label><input id="m_title">
+    <button class="btn" id="m_go">ثبت فوری در حساب</button></div>
+  <h2>در انتظار تایید ادمین</h2>
+  <div class="card" id="queue"></div>
+  <h2>سفارش‌های زیورآلات در انتظار تحویل</h2>
+  <div class="card" id="orders"></div>
+  <h2>حساب اجرت زیورآلات</h2>
+  <div class="card" id="wages"></div>
+  <h2>تراکنش‌ها</h2>
+  <div class="card" id="all"></div>
+  <button class="btn ghost adm-only" id="reset">بازنشانی داده‌های نمونه</button>
+</section>
+</main>
+<nav><div>
+  <button data-v="home" class="on">قیمت‌ها</button>
+  <button data-v="gal">محصولات</button>
+  <button data-v="add">ثبت</button>
+  <button data-v="bal">مانده</button>
+  <button data-v="stm">صورت‌حساب<span id="bdg" class="bdg"></span></button>
+</div></nav>
+<div id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const TYPES={gold_buy:'خرید آبشده',gold_sell:'فروش آبشده',gold_in:'واریز طلا',gold_out:'برداشت طلا',coin_buy:'خرید سکه',coin_sell:'فروش سکه',cash_in:'واریز تومان',cash_out:'برداشت تومان'};
+const SHOW={gold_buy:['w','p'],gold_sell:['w','p'],gold_in:['w'],gold_out:['w'],coin_buy:['ct','n','p'],coin_sell:['ct','n','p'],cash_in:['a'],cash_out:['a']};
+const CN={tam:'تمام',nim:'نیم',rob:'ربع'},CK={tam:'t',nim:'n',rob:'r'};
+const KEYS=[['g','گرم ۱۸ عیار'],['t','تمام سکه'],['n','نیم سکه'],['r','ربع سکه']];
+const D=[{n:'دستبند زنجیر',min:3,max:12,wm:'t',wv:1800000,ic:'◌'},{n:'گردنبند پلاک',min:2,max:8,wm:'g',wv:9,ic:'◈'},{n:'انگشتر ساده',min:2,max:7,wm:'m',wv:8,ic:'○'},{n:'گوشواره حلقه‌ای',min:1,max:5,wm:'t',wv:2200000,ic:'◎'},{n:'النگو',min:8,max:30,wm:'g',wv:6,ic:'◯'},{n:'نیم‌ست',min:10,max:40,wm:'m',wv:7,ic:'❖'}];
+const wl=x=>x.wm==='t'?'اجرت '+fa(x.wv)+' تومان هر گرم':'اجرت '+fa(x.wv)+' درصد '+(x.wm==='g'?'طلایی':'پولی');
+const fa=n=>Number(n).toLocaleString('fa-IR',{maximumFractionDigits:3});
+const sg=(n,u='')=>'<bdi dir="ltr" class="'+(n<0?'neg':n>0?'pos':'')+'">'+(n<0?'−':n>0?'+':'')+fa(Math.abs(n))+'</bdi>'+(u?'<span class="u">'+u+'</span>':'');
+const num=id=>parseFloat(String($(id).value).replace(/[,٬]/g,''))||0;
+const now=()=>new Date().toLocaleString('fa-IR');
+let S={rows:[{id:'m',name:'آبشده مثقال',kind:'m',src:'mesghal',base:124424000,ba:231000,sa:-230000},{id:'g',name:'گرم ۱۸ عیار',kind:'g',src:'geram18',base:27000000,ba:50000,sa:-50000},{id:'t',name:'تمام سکه',kind:'c',ct:'tam',src:'sekee',base:269750000,ba:950000,sa:-950000},{id:'n',name:'نیم سکه',kind:'c',ct:'nim',src:'nim',base:140750000,ba:1250000,sa:-1250000},{id:'r',name:'ربع سکه',kind:'c',ct:'rob',src:'rob',base:75000000,ba:1000000,sa:-1000000}],upd:now(),entries:[],orders:[],queue:[],admin:false,live:{url:'',on:false,ok:null,at:''}};
+try{const s=localStorage.getItem('anamis3');if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
+S.rows.forEach(r=>{if(r.base===undefined){r.base=Math.round(((r.buy||0)+(r.sell||0))/2);r.ba=(r.buy||0)-r.base;r.sa=(r.sell||0)-r.base;r.src=r.src||({m:'mesghal',g:'geram18',t:'sekee',n:'nim',r:'rob'}[r.id]||'');delete r.buy;delete r.sell}});
+if(!S.prods||!S.prods.length)S.prods=D.map((x,i)=>Object.assign({id:'p'+i,imgs:[]},x));
+if(!S.cust)S.cust='مشتری نمونه';
+const save=()=>{try{localStorage.setItem('anamis3',JSON.stringify(S));return true}catch(e){if(!save.w){save.w=1;toast('حافظه مرورگر پر است، عکس‌ها را کمتر کنید')}return false}};
+const zero=()=>({gold:0,toman:0,coin:{tam:0,nim:0,rob:0},jewel:0,wageT:0,wageG:0});
+
+function calc(t,v){
+  const d=zero(),w18=v.w*v.k/750;
+  if(t==='gold_buy'){d.gold=w18;d.toman=-w18*v.p}
+  if(t==='gold_sell'){d.gold=-w18;d.toman=w18*v.p}
+  if(t==='gold_in')d.gold=w18;
+  if(t==='gold_out')d.gold=-w18;
+  if(t==='coin_buy'){d.coin[v.ct]=v.n;d.toman=-v.n*v.p}
+  if(t==='coin_sell'){d.coin[v.ct]=-v.n;d.toman=v.n*v.p}
+  if(t==='cash_in')d.toman=v.a;
+  if(t==='cash_out')d.toman=-v.a;
+  if(t==='jewel_buy'){
+    d.jewel=w18;d.gold=-w18;
+    if(v.wm==='t')d.wageT=v.w*v.wv;
+    if(v.wm==='g')d.wageG=v.w*v.wv/100;
+    if(v.wm==='m')d.wageT=w18*v.p*v.wv/100;
+    d.toman-=d.wageT;d.gold-=d.wageG;
+  }
+  return d;
+}
+function vals(){return{w:num('#f_w'),k:750,ct:$('#f_ct').value,n:num('#f_n'),p:defp()||0,a:num('#f_a')}}
+function lines(d){
+  const o=[];
+  if(d.gold)o.push(['طلا',sg(d.gold,'گرم')]);
+  if(d.toman)o.push(['تومان',sg(d.toman,'تومان')]);
+  for(const k in d.coin)if(d.coin[k])o.push(['سکه '+CN[k],sg(d.coin[k],'عدد')]);
+  if(d.jewel)o.push(['زیورآلات',sg(d.jewel,'گرم')]);
+  return o;
+}
+function pv(d){
+  let h=lines(d).map(x=>'<div><span>'+x[0]+'</span><span>'+x[1]+'</span></div>').join('');
+  if(d.wageT||d.wageG)h+='<div><span>اجرت (در حساب اجرت ثبت می‌شود)</span><span>'+(d.wageT?fa(d.wageT)+' تومان':'')+(d.wageT&&d.wageG?'، ':'')+(d.wageG?fa(d.wageG)+' گرم طلا':'')+'</span></div>';
+  return h;
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pr=(r,j)=>Math.max(0,Math.round(r.base+(j?r.sa:r.ba)));
+const on=(r,j)=>r.on!==false&&(j?r.sOn:r.bOn)!==false;
+const chk=(r,i)=>'<div class="chk"><label><input type="checkbox" data-i="'+i+'" data-f="on"'+(r.on!==false?' checked':'')+'>نمایش ردیف</label><label><input type="checkbox" data-i="'+i+'" data-f="bOn"'+(r.bOn!==false?' checked':'')+'>خرید فعال</label><label><input type="checkbox" data-i="'+i+'" data-f="sOn"'+(r.sOn!==false?' checked':'')+'>فروش فعال</label></div>';
+const gp=(j,any)=>{const ok=r=>any||on(r,j);const r=S.rows.find(x=>x.kind==='g'&&ok(x));if(r)return pr(r,j);const m=S.rows.find(x=>x.kind==='m'&&ok(x));return m?Math.round(pr(m,j)/4.6083):0};
+const SRCO=[['','دستی'],['geram18','گرم ۱۸ عیار'],['mesghal','مثقال'],['sekee','تمام سکه'],['nim','نیم سکه'],['rob','ربع سکه']];
+const STEP=r=>r.kind==='c'?100000:r.kind==='m'?50000:10000;
+function defp(){
+  const t=$('#type').value,j=t.endsWith('sell')?1:0;
+  if(t.startsWith('gold'))return gp(j);
+  if(t.startsWith('coin')){const r=S.rows.find(x=>x.kind==='c'&&x.ct===$('#f_ct').value&&on(x,j));return r?pr(r,j):0}
+  return '';
+}
+function show(){
+  const t=$('#type').value;
+  document.querySelectorAll('#v-add .fld').forEach(e=>e.classList.toggle('on',SHOW[t].includes(e.dataset.k)));
+  $('#pl').textContent=t.startsWith('coin')?'قیمت هر عدد (تومان، ثابت از لیست قیمت‌ها)':'قیمت هر گرم (تومان، ثابت از لیست قیمت‌ها)';
+  $('#f_p').value=defp();
+  prev();
+}
+function prev(){$('#prev').innerHTML=pv(calc($('#type').value,vals()))||'اثر معامله روی مانده‌ها اینجا نمایش داده می‌شود.'}
+function tot(){
+  const b=zero();
+  S.entries.filter(e=>!e.void).forEach(e=>{b.gold+=e.d.gold;b.toman+=e.d.toman;b.jewel+=e.d.jewel;b.wageT+=e.d.wageT;b.wageG+=e.d.wageG;for(const k in b.coin)b.coin[k]+=e.d.coin[k]});
+  return b;
+}
+function ledger(){
+  const b=zero(),out=[],cl=o=>JSON.parse(JSON.stringify(o));
+  S.entries.forEach(e=>{
+    const before=cl(b);
+    if(!e.void){b.gold+=e.d.gold;b.toman+=e.d.toman;b.jewel+=e.d.jewel;for(const k in b.coin)b.coin[k]+=e.d.coin[k]}
+    out.push({before,after:cl(b)});
+  });
+  return out;
+}
+const coinTxt=c=>Object.keys(c).filter(k=>c[k]).map(k=>CN[k]+' '+sg(c[k])).join('، ')||'۰';
+const fmtBal=b=>'طلا '+sg(b.gold,'گرم')+'، تومان '+sg(b.toman)+'، سکه '+coinTxt(b.coin)+'، زیورآلات '+sg(b.jewel,'گرم');
+function txRow(e,i,L,admin){
+  const l=L[i];
+  return '<div class="tx'+(e.void?' void':'')+'"><div><b>'+esc(e.title)+'</b><small>'+e.date+(e.note?'، '+esc(e.note):'')+'</small><div class="ba">قبل: '+fmtBal(l.before)+'</div><div class="ba">بعد: '+fmtBal(l.after)+'</div><button data-inv="'+i+'">فاکتور PDF</button>'+(admin?' <button data-i="'+i+'">'+(e.void?'بازگردانی':'ابطال')+'</button>':'')+'</div><div class="r">'+lines(e.d).map(x=>'<div>'+x[1]+' <span class="u">'+x[0]+'</span></div>').join('')+'</div></div>';
+}
+function renderAll(){
+  const L=ledger();
+  $('#all').innerHTML=S.entries.map((e,i)=>[e,i]).reverse().map(x=>txRow(x[0],x[1],L,S.admin)).join('')||'<div class="empty">هنوز معامله‌ای ثبت نشده است. از تب «قیمت‌ها» شروع کنید.</div>';
+}
+function board(){
+  const L=S.live,b=L.url&&L.on?(L.ok?'<span class="pos">● قیمت لحظه‌ای</span>':L.ok===false?'<span class="neg">● منبع در دسترس نیست، قیمت دستی</span>':'در حال اتصال'):'قیمت دستی ادمین';
+  let h='<div class="lbl">آخرین بروزرسانی: '+S.upd+'</div><div class="lbl">'+b+'</div><div class="lbl">روی قیمت بزنید تا معامله ثبت شود. قیمت معامله همین قیمت است و قابل تغییر نیست.</div><h2>قیمت‌ها</h2>';
+  S.rows.forEach(r=>{
+    if(r.on===false)return;
+    h+='<div class="prow"><div class="n">'+esc(r.name)+'</div>'+[0,1].map(j=>on(r,j)?'<button class="pbtn '+(j?'s':'b')+'" data-r="'+r.id+'" data-j="'+j+'">'+fa(pr(r,j))+'<small>'+(j?'شما می‌فروشید':'شما می‌خرید')+'</small></button>':'<button class="pbtn off" disabled>—<small>'+(j?'فروش':'خرید')+' غیرفعال</small></button>').join('')+'</div>';
+  });
+  if(!S.rows.some(r=>r.on!==false))h+='<div class="empty">ردیف فعالی وجود ندارد.</div>';
+  $('#board').innerHTML=h;
+}
+function render(){
+  const b=tot();
+  $('#b-gold').innerHTML=sg(b.gold,'گرم');
+  $('#b-toman').innerHTML=sg(b.toman,'تومان');
+  $('#b-jewel').innerHTML=sg(b.jewel,'گرم');
+  $('#b-coin').innerHTML=Object.keys(b.coin).map(k=>'<span style="margin-inline-end:14px">'+CN[k]+' '+sg(b.coin[k])+'</span>').join('');
+  renderAll();
+  $('#wages').innerHTML='<div class="lbl">مجموع اجرت زیورآلات تحویل‌شده</div><div class="v">'+fa(b.wageT)+'<span class="u">تومان</span></div><div class="v" style="font-size:16px">'+fa(b.wageG)+'<span class="u">گرم طلا</span></div>';
+  $('#orders').innerHTML=S.orders.map((o,i)=>'<div class="tx"><div><b>'+o.title+'</b><small>'+o.date+'، در انتظار ساخت و تحویل</small>'+(S.admin?'<button data-o="'+i+'" data-a="ok">تایید تحویل</button> <button data-o="'+i+'" data-a="x">لغو سفارش</button>':'')+'</div><div class="r">'+pv(o.d)+'</div></div>').join('')||'<div class="empty">سفارشی در انتظار نیست. از تب «محصولات» سفارش دهید.</div>';
+}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
+function go(v){
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  window.scrollTo(0,0);
+}
+function seed(){
+  const dt=now(),t=Date.now();
+  S.entries=[{title:'خرید آبشده، ۱ گرم با قیمت ۲۷ میلیون',date:dt,ts:t,note:'',d:calc('gold_buy',{w:1,k:750,p:27000000})},{title:'واریز تومان',date:dt,ts:t,note:'',d:calc('cash_in',{a:27000000})}];
+  S.orders=[];S.queue=[];
+}
+function trade(id,j){
+  const r=S.rows.find(x=>x.id===id);if(!r||!on(r,j))return;
+  const side=j?'sell':'buy',p=pr(r,j);
+  if(r.kind==='c'){$('#type').value='coin_'+side;$('#f_ct').value=r.ct;$('#f_n').value=''}
+  else{$('#type').value='gold_'+side;$('#f_w').value=r.kind==='m'?4.608:''}
+  show();go('add');
+}
+let sel=0;
+function oCalc(){const x=S.prods[sel];return calc('jewel_buy',{w:num('#o_w'),k:750,p:gp(0,true),wm:x.wm,wv:x.wv})}
+function oPrev(){
+  const w=num('#o_w'),x=S.prods[sel];
+  $('#o-p').innerHTML=(w&&(w<x.min||w>x.max)?'<div class="neg">این وزن خارج از بازه پیشنهادی طرح است.</div>':'')+(pv(oCalc())||'ارزش طلا و اجرت اینجا محاسبه می‌شود.');
+}
+$('#type').innerHTML=Object.keys(TYPES).map(k=>'<option value="'+k+'">'+TYPES[k]+'</option>').join('');
+$('#type').onchange=()=>{$('#f_p').value='';show()};
+$('#f_ct').onchange=()=>{$('#f_p').value='';show()};
+document.querySelectorAll('#v-add input,#v-add select').forEach(e=>e.addEventListener('input',prev));
+$('#board').onclick=e=>{const b=e.target.closest('.pbtn');if(b)trade(b.dataset.r,+b.dataset.j)};
+const WIN={geram18:[5e6,1e8],mesghal:[2e7,5e8],sekee:[5e7,1e9],nim:[2.5e7,6e8],rob:[1.5e7,3e8]};
+const RX={geram18:/geram18|gold18|(?:18|۱۸).{0,12}(?:عیار|carat)|طلای\s*(?:18|۱۸)/i,mesghal:/مثقال|mesghal/i,sekee:/سکه\s*امامی|تمام\s*سکه|sekee|emami|imami|full\s*coin/i,nim:/نیم|\bnim\b|half/i,rob:/ربع|\brob\b|quarter/i};
+const BAD={geram18:/24|۲۴|740|۷۴۰|دست\s*دوم|ounce|اونس|\bons\b|مثقال|mesghal/i,mesghal:/ounce|اونس/i,sekee:/گرمی|تک|retail|حباب|blubber|bubble|نیم|ربع|بهار|down/i,nim:/retail|تک|حباب|blubber|bubble|down/i,rob:/retail|تک|حباب|blubber|bubble|down/i};
+const en=x=>String(x).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const pn=x=>{if(x==null||typeof x==='boolean')return NaN;return parseFloat(en(x).replace(/[,٬\s]/g,''))};
+function collect(node,key,out,depth){
+  if(depth>7||out.length>2000)return;
+  if(node&&typeof node==='object'){
+    if(!Array.isArray(node)){
+      const nm=['name','title','label','symbol','fa','en','عنوان','نام','key'].map(k=>typeof node[k]==='string'?node[k]:'').join(' ');
+      const label=(typeof key==='string'?key:'')+' '+nm;
+      for(const k of ['price','p','value','last','current','live','قیمت','sell','buy']){const v=pn(node[k]);if(v>0){out.push([label,v]);break}}
+    }
+    for(const k in node)collect(node[k],Array.isArray(node)?'':k,out,depth+1);
+  }else{const v=pn(node);if(v>0&&typeof key==='string'&&key)out.push([key,v])}
+}
+function extract(j){
+  const c=[],got={};collect(j,'',c,0);
+  for(const k in WIN){
+    for(const [label,v] of c){
+      if(!RX[k].test(label)||(BAD[k]&&BAD[k].test(label)))continue;
+      const t=[v,v/10].find(x=>x>=WIN[k][0]&&x<=WIN[k][1]);
+      if(t){got[k]=t;break}
+    }
+  }
+  return got;
+}
+let DBG='';
+const DEF_URL='https://api.majidapi.ir/price/gold';
+const errFa=e=>/fetch|network|load/i.test(e)?'مرورگر اجازه دریافت نداد یا اینترنت قطع است':e==='json'?'پاسخ منبع JSON نیست':e==='empty'?'قیمتی در پاسخ پیدا نشد':e==='range'?'قیمت‌های دریافتی نامعتبر بودند':e;
+async function pullLive(manual){
+  const L=S.live;if(!L.url||(!L.on&&!manual))return;
+  if(!manual&&L.t&&Date.now()-L.t<55000)return;
+  L.t=Date.now();
+  try{
+    const res=await fetch(L.url,{cache:'no-store'});
+    if(!res.ok)throw new Error('http '+res.status);
+    const txt=await res.text();DBG=txt.slice(0,1500);
+    let j;try{j=JSON.parse(txt)}catch(e){throw new Error('json')}
+    const got=extract(j);let n=0,bad=0;
+    S.rows.forEach(r=>{if(!r.src||got[r.src]==null)return;const v=Math.round(got[r.src]);if(r.base>0&&Math.abs(v/r.base-1)>.35){bad++;return}r.base=v;n++});
+    if(!n)throw new Error(bad?'range':'empty');
+    L.ok=true;L.at=now();L.err='';S.upd=L.at;
+    if(manual)toast('قیمت‌ها بروز شد');
+  }catch(e){L.ok=false;L.err=String(e.message||e);if(manual)toast('دریافت قیمت ممکن نشد')}
+  save();board();
+  if(!$('#adm').contains(document.activeElement))adm();
+}
+async function showRaw(){
+  try{const r=await fetch(S.live.url,{cache:'no-store'});DBG='HTTP '+r.status+'\n'+(await r.text()).slice(0,1500)}
+  catch(e){DBG='خطا: '+e.message}
+  adm();
+}
+if(!S.live.url&&!S.live.set){S.live.url=DEF_URL;S.live.on=true;S.live.ok=null}
+function adm(){
+  const L=S.live,st=L.url?(L.on?(L.ok?'<span class="pos">متصل، '+L.at+'</span>':L.ok===false?'<span class="neg">خطا: '+esc(errFa(L.err||''))+'، قیمت دستی استفاده می‌شود</span>':'در حال اتصال'):'خاموش'):'آدرس منبع وارد نشده';
+  let h='<div class="ar"><b>قیمت لحظه‌ای</b><label for="lv_url">آدرس منبع قیمت (JSON)</label><input id="lv_url" dir="ltr" inputmode="url" placeholder="https://..." value="'+esc(L.url)+'"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="lv_on" style="width:auto;margin:0"'+(L.on?' checked':'')+'>استفاده از قیمت لحظه‌ای</label><div class="lbl">وضعیت: '+st+'</div><button class="btn ghost" id="lv_go">دریافت قیمت (تست)</button><button class="btn ghost" id="lv_raw">نمایش پاسخ منبع</button>'+(DBG?'<pre dir="ltr" style="white-space:pre-wrap;word-break:break-all;font-size:11px;max-height:200px;overflow:auto;color:var(--mu)">'+esc(DBG)+'</pre>':'')+'</div>';
+  h+=S.rows.map((r,i)=>{
+    const adj=(f,t)=>'<div><label>'+t+'</label><div class="stp"><button data-st="'+f+'" data-i="'+i+'" data-d="-1" aria-label="کم کردن">−</button><input dir="ltr" data-i="'+i+'" data-f="'+f+'" inputmode="text" value="'+r[f]+'"><button data-st="'+f+'" data-i="'+i+'" data-d="1" aria-label="زیاد کردن">+</button></div></div>';
+    return '<div class="ar"><input data-i="'+i+'" data-f="name" value="'+esc(r.name)+'" aria-label="نام ردیف"><label>منبع قیمت پایه</label><select data-i="'+i+'" data-f="src">'+SRCO.map(o=>'<option value="'+o[0]+'"'+(o[0]===(r.src||'')?' selected':'')+'>'+o[1]+'</option>').join('')+'</select><label>قیمت پایه (تومان)</label><input dir="ltr" data-i="'+i+'" data-f="base" inputmode="numeric" value="'+r.base+'"><div class="row2">'+adj('ba','تعدیل «شما می‌خرید»')+adj('sa','تعدیل «شما می‌فروشید»')+'</div>'+chk(r,i)+'<div class="lbl" id="fin'+i+'">قیمت نهایی: خرید '+fa(pr(r,0))+'، فروش '+fa(pr(r,1))+'</div><button class="rm" data-rm="'+i+'">حذف ردیف</button></div>';
+  }).join('');
+  h+='<label for="n_name">افزودن ردیف جدید</label><div class="row2"><input id="n_name" placeholder="نام ردیف"><select id="n_kind"><option value="g">طلا، قیمت هر گرم</option><option value="m">طلا، قیمت هر مثقال</option><option value="tam">سکه تمام</option><option value="nim">سکه نیم</option><option value="rob">سکه ربع</option></select></div><button class="btn ghost" id="n_add">افزودن ردیف</button>';
+  $('#adm').innerHTML=h;
+}
+adm();
+$('#adm').oninput=e=>{
+  const t=e.target;
+  if(t.id==='lv_url'){S.live.url=t.value.trim();S.live.set=true;S.live.ok=null;save();return}
+  if(t.id==='lv_on'){S.live.on=t.checked;S.live.set=true;S.live.ok=null;save();board();if(t.checked)pullLive();return}
+  if(t.dataset.i===undefined)return;
+  const r=S.rows[t.dataset.i],f=t.dataset.f;
+  if(f==='name')r.name=t.value;
+  else if(f==='src')r.src=t.value;
+  else if(t.type==='checkbox')r[f]=t.checked;
+  else r[f]=parseFloat(String(t.value).replace(/[,٬]/g,''))||0;
+  S.upd=now();save();board();
+  const fin=$('#fin'+t.dataset.i);
+  if(fin)fin.textContent='قیمت نهایی: خرید '+fa(pr(r,0))+'، فروش '+fa(pr(r,1));
+};
+$('#adm').onclick=e=>{
+  const t=e.target;
+  if(t.dataset.st){const r=S.rows[t.dataset.i];r[t.dataset.st]+=STEP(r)*(+t.dataset.d);S.upd=now();save();adm();board();return}
+  if(t.dataset.rm!==undefined){S.rows.splice(t.dataset.rm,1);save();adm();board();return}
+  if(t.id==='lv_go'){S.live.on=true;S.live.set=true;pullLive(true);return}
+  if(t.id==='lv_raw'){showRaw();return}
+  if(t.id==='n_add'){
+    const nm=$('#n_name').value.trim(),k=$('#n_kind').value;
+    if(!nm){toast('نام ردیف را وارد کنید');return}
+    const c=['tam','nim','rob'].includes(k),SM={g:'geram18',m:'mesghal',tam:'sekee',nim:'nim',rob:'rob'};
+    S.rows.push({id:'r'+Date.now(),name:nm,kind:c?'c':k,ct:c?k:undefined,src:SM[k],base:0,ba:0,sa:0});
+    S.upd=now();save();adm();board();toast('ردیف اضافه شد، قیمت پایه را وارد کنید');
+  }
+};
+const wmL={t:'تومانی هر گرم',g:'درصد طلایی',m:'درصد پولی'};
+const imgOf=x=>x.imgs&&x.imgs[0]?'<img src="'+x.imgs[0]+'" alt="'+esc(x.n)+'">':x.ic;
+function renderProds(){
+  $('#gal').innerHTML=S.prods.map((x,i)=>'<button class="gi" data-i="'+i+'"><div class="im">'+imgOf(x)+'</div><div class="t">'+esc(x.n)+'<small>وزن '+fa(x.min)+' تا '+fa(x.max)+' گرم</small><small>'+wl(x)+'</small></div></button>').join('')||'<div class="empty">محصولی ثبت نشده است.</div>';
+}
+function padm(){
+  $('#padm').innerHTML=S.prods.map((x,i)=>'<div class="ar"><input data-p="'+i+'" data-f="n" value="'+esc(x.n)+'" aria-label="نام محصول"><div class="row2"><div><label>حداقل وزن</label><input dir="ltr" data-p="'+i+'" data-f="min" inputmode="decimal" value="'+x.min+'"></div><div><label>حداکثر وزن</label><input dir="ltr" data-p="'+i+'" data-f="max" inputmode="decimal" value="'+x.max+'"></div></div><div class="row2"><div><label>نوع اجرت</label><select data-p="'+i+'" data-f="wm">'+['t','g','m'].map(k=>'<option value="'+k+'"'+(x.wm===k?' selected':'')+'>'+wmL[k]+'</option>').join('')+'</select></div><div><label>مقدار اجرت</label><input dir="ltr" data-p="'+i+'" data-f="wv" inputmode="decimal" value="'+x.wv+'"></div></div><div class="thumbs">'+(x.imgs||[]).map((u,k)=>'<div class="th"><img src="'+u+'" alt=""><button data-pd="'+i+'" data-k="'+k+'" aria-label="حذف عکس">×</button></div>').join('')+'</div><label class="upl">افزودن عکس<input type="file" accept="image/*" multiple hidden data-pu="'+i+'"></label><button class="rm" data-prm="'+i+'">حذف محصول</button></div>').join('')+'<button class="btn ghost" id="p_add">افزودن محصول جدید</button>';
+}
+const rdImg=f=>new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.72))};im.onerror=no;im.src=fr.result};fr.onerror=no;fr.readAsDataURL(f)});
+renderProds();padm();
+$('#padm').oninput=e=>{const t=e.target;if(t.dataset.p===undefined||t.type==='file')return;const x=S.prods[t.dataset.p],f=t.dataset.f;x[f]=(f==='n'||f==='wm')?t.value:(parseFloat(t.value)||0);save();renderProds()};
+$('#padm').onchange=async e=>{
+  const t=e.target;if(t.dataset.pu===undefined)return;
+  const x=S.prods[t.dataset.pu];x.imgs=x.imgs||[];
+  for(const f of t.files){if(x.imgs.length>=5){toast('حداکثر ۵ عکس برای هر محصول');break}try{x.imgs.push(await rdImg(f))}catch(er){toast('عکس خوانده نشد')}}
+  save();padm();renderProds();
+};
+$('#padm').onclick=e=>{
+  const t=e.target;
+  if(t.dataset.pd!==undefined){S.prods[t.dataset.pd].imgs.splice(t.dataset.k,1);save();padm();renderProds();return}
+  if(t.dataset.prm!==undefined){S.prods.splice(t.dataset.prm,1);$('#ord').hidden=true;save();padm();renderProds();return}
+  if(t.id==='p_add'){S.prods.push({id:'p'+Date.now(),n:'محصول جدید',min:1,max:10,wm:'t',wv:0,ic:'◇',imgs:[]});save();padm();renderProds()}
+};
+$('#gal').onclick=e=>{
+  const b=e.target.closest('.gi');if(!b)return;
+  sel=+b.dataset.i;const x=S.prods[sel];
+  $('#ord').hidden=false;$('#o-t').textContent=x.n;
+  $('#o-i').textContent='وزن پیشنهادی '+fa(x.min)+' تا '+fa(x.max)+' گرم، '+wl(x);
+  $('#o-img').innerHTML=(x.imgs||[]).map(u=>'<img src="'+u+'" alt="">').join('');
+  $('#o_w').value='';oPrev();$('#ord').scrollIntoView({behavior:'smooth'});
+};
+$('#o_w').oninput=oPrev;
+$('#o-go').onclick=()=>{
+  const w=num('#o_w'),x=S.prods[sel];
+  if(!w){toast('وزن سفارش را وارد کنید');return}
+  enqueue('order',{title:'سفارش '+x.n+'، '+fa(w)+' گرم',note:'',d:oCalc()});
+  save();render();$('#ord').hidden=true;toast('سفارش برای تایید ادمین ارسال شد');go('stm');
+};
+$('#orders').onclick=e=>{
+  const i=e.target.dataset.o;if(i===undefined||!S.admin)return;
+  const o=S.orders.splice(i,1)[0];
+  if(e.target.dataset.a==='ok')S.entries.push({title:o.title.replace('سفارش','تحویل'),date:now(),ts:Date.now(),note:'',d:o.d});
+  save();render();
+};
+$('#save').onclick=()=>{
+  const t=$('#type').value,v=vals(),d=calc(t,v);
+  if(SHOW[t].includes('p')&&!v.p){toast('این معامله در حال حاضر غیرفعال است');return}
+  if(!lines(d).length){toast('مقدار معامله را وارد کنید');return}
+  let title=TYPES[t];
+  if(SHOW[t].includes('w'))title+='، '+fa(v.w)+' گرم';
+  if(SHOW[t].includes('n'))title+='، '+fa(v.n)+' '+CN[v.ct];
+  if(SHOW[t].includes('p')&&v.p)title+=' با قیمت '+fa(v.p);
+  enqueue('entry',{title,note:$('#f_note').value,d});
+  save();render();
+  ['#f_w','#f_n','#f_p','#f_a','#f_note'].forEach(i=>$(i).value='');
+  show();go('stm');toast('معامله برای تایید ادمین ارسال شد');
+};
+$('#all').onclick=e=>{const t=e.target;if(t.dataset.inv!==undefined){const i=+t.dataset.inv;toPdf(invOne(i),'anamis-invoice-'+(i+1)+'.pdf');return}if(t.dataset.i===undefined||!S.admin)return;S.entries[t.dataset.i].void=!S.entries[t.dataset.i].void;save();render()};
+$('#reset').onclick=()=>{seed();save();render();toast('داده‌های نمونه بازگشت')};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+const EXP=120000,pd=x=>String(x).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const mm=ms=>{const t=Math.max(0,Math.ceil(ms/1000));return pd(Math.floor(t/60))+':'+pd(String(t%60).padStart(2,'0'))};
+const STL={ok:'تایید و ثبت شد',rej:'رد شد',exp:'منقضی شد'};
+function enqueue(kind,o){
+  S.queue.push(Object.assign({id:'q'+Date.now(),kind,date:now(),exp:Date.now()+EXP,st:'wait'},o));
+  if(S.queue.length>40)S.queue=S.queue.filter(q=>q.st==='wait').concat(S.queue.filter(q=>q.st!=='wait').slice(-20));
+  save();renderQ();
+}
+function qDone(q,st){
+  q.st=st;
+  if(st==='ok'){
+    if(q.kind==='entry')S.entries.push({title:q.title,date:now(),ts:Date.now(),note:q.note,d:q.d});
+    else S.orders.push({title:q.title,date:q.date,d:q.d});
+  }
+  save();render();renderQ();
+}
+function renderQ(){
+  const w=S.queue.filter(q=>q.st==='wait').length,b=$('#bdg');
+  b.textContent=pd(w);b.classList.toggle('on',S.admin&&w>0);
+  $('#queue').innerHTML=S.queue.slice().reverse().slice(0,8).map(q=>'<div class="tx"><div><b>'+q.title+'</b><small>'+q.date+'</small>'+(q.st==='wait'&&S.admin?'<button data-q="'+q.id+'" data-a="ok">تایید</button> <button data-q="'+q.id+'" data-a="rej">رد</button>':'')+'</div><div class="r"><div>'+(q.st==='wait'?'<span class="u">'+mm(q.exp-Date.now())+' تا انقضا</span>':'<b>'+STL[q.st]+'</b>')+'</div>'+lines(q.d).map(x=>'<div>'+x[1]+' <span class="u">'+x[0]+'</span></div>').join('')+'</div></div>').join('')||'<div class="empty">معامله‌ای در انتظار تایید نیست. معامله‌ها بعد از تایید ادمین در حساب ثبت می‌شوند.</div>';
+}
+function tick(){
+  let ch=false;
+  S.queue.forEach(q=>{if(q.st==='wait'&&Date.now()>=q.exp){q.st='exp';ch=true}});
+  if(ch)save();
+  renderQ();
+}
+function applyRole(){
+  document.body.classList.toggle('isadmin',S.admin);
+  $('#role').textContent=S.admin?'نمای ادمین':'نمای کاربر';
+  $('#role').setAttribute('aria-pressed',S.admin);
+}
+$('#role').onclick=()=>{S.admin=!S.admin;save();applyRole();render();renderQ()};
+$('#queue').onclick=e=>{
+  const id=e.target.dataset.q;if(!id||!S.admin)return;
+  const q=S.queue.find(x=>x.id===id);
+  if(q&&q.st==='wait')qDone(q,e.target.dataset.a);
+};
+const TB='width:100%;border-collapse:collapse;margin:12px 0',TD='border:1px solid #bbb;padding:6px 8px;text-align:right',TH=TD+';background:#eef1f6;font-weight:700';
+const sgI=(n,u)=>'<span dir="ltr" style="color:'+(n<0?'#b3261e':n>0?'#1a7f43':'#111')+'">'+(n<0?'−':n>0?'+':'')+fa(Math.abs(n))+'</span>'+(u?' '+u:'');
+const coinI=c=>Object.keys(c).filter(k=>c[k]).map(k=>CN[k]+' '+sgI(c[k])).join('، ')||'۰';
+const balI=b=>'<td style="'+TD+'">'+sgI(b.gold,'گرم')+'</td><td style="'+TD+'">'+sgI(b.toman,'تومان')+'</td><td style="'+TD+'">'+coinI(b.coin)+'</td><td style="'+TD+'">'+sgI(b.jewel,'گرم')+'</td>';
+const balHead='<tr><th style="'+TH+'"></th><th style="'+TH+'">طلا (۱۸ عیار)</th><th style="'+TH+'">تومان</th><th style="'+TH+'">سکه</th><th style="'+TH+'">زیورآلات</th></tr>';
+function invWrap(title,meta,inner){
+  const lg=document.querySelector('header img'),logo=lg?'<img src="'+lg.src+'" style="width:64px;height:auto;border-radius:8px">':'';
+  return '<div style="direction:rtl;font-family:Vazirmatn,Tahoma,sans-serif;color:#111;background:#fff;padding:36px;width:794px;box-sizing:border-box;line-height:1.8;font-size:14px"><div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #c9a227;padding-bottom:12px">'+logo+'<div style="flex:1"><div style="font-size:22px;font-weight:800;letter-spacing:1px">ANAMIS</div><div style="color:#555">آنامیس، معاملات طلا و زیورآلات</div></div><div style="font-size:20px;font-weight:700">'+title+'</div></div><div style="margin:12px 0;color:#333">'+meta+'</div>'+inner+'<div style="margin-top:24px;color:#777;font-size:12px;border-top:1px solid #ddd;padding-top:8px">این سند توسط سامانه آنامیس صادر شده است.</div></div>';
+}
+function invOne(i){
+  const e=S.entries[i],l=ledger()[i],d=e.d,rows=[];
+  if(d.gold)rows.push(['طلا (۱۸ عیار)',sgI(d.gold,'گرم')]);
+  if(d.toman)rows.push(['تومان',sgI(d.toman,'تومان')]);
+  for(const k in d.coin)if(d.coin[k])rows.push(['سکه '+CN[k],sgI(d.coin[k],'عدد')]);
+  if(d.jewel)rows.push(['زیورآلات',sgI(d.jewel,'گرم')]);
+  if(d.wageT||d.wageG)rows.push(['اجرت زیورآلات (از موارد بالا)',(d.wageT?fa(d.wageT)+' تومان':'')+(d.wageT&&d.wageG?'، ':'')+(d.wageG?fa(d.wageG)+' گرم طلا':'')]);
+  const meta='شماره فاکتور: INV-'+String(i+1).padStart(5,'0')+'<br>تاریخ: '+e.date+'<br>مشتری: '+esc(S.cust)+'<br>وضعیت: '+(e.void?'ابطال‌شده':'ثبت‌شده');
+  const inner='<div style="font-weight:700;margin-top:8px">شرح: '+esc(e.title)+(e.note?'، '+esc(e.note):'')+'</div><table style="'+TB+'"><tr><th style="'+TH+'">مورد</th><th style="'+TH+'">اثر بر حساب مشتری</th></tr>'+rows.map(r=>'<tr><td style="'+TD+'">'+r[0]+'</td><td style="'+TD+'">'+r[1]+'</td></tr>').join('')+'</table><div style="font-weight:700">مانده حساب</div><table style="'+TB+'">'+balHead+'<tr><td style="'+TD+'">قبل از تراکنش</td>'+balI(l.before)+'</tr><tr><td style="'+TD+'">بعد از تراکنش</td>'+balI(l.after)+'</tr></table>';
+  return invWrap('فاکتور',meta,inner);
+}
+function invAll(from,to){
+  const L=ledger(),idx=S.entries.map((e,i)=>i).filter(i=>{const e=S.entries[i];if(e.void)return false;if(e.ts){if(from&&e.ts<from)return false;if(to&&e.ts>=to)return false}return true});
+  if(!idx.length)return null;
+  const sum=zero();
+  const rows=idx.map((i,k)=>{const e=S.entries[i],d=e.d;sum.gold+=d.gold;sum.toman+=d.toman;sum.jewel+=d.jewel;for(const c in sum.coin)sum.coin[c]+=d.coin[c];
+    return '<tr><td style="'+TD+'">'+fa(k+1)+'</td><td style="'+TD+'">'+e.date+'</td><td style="'+TD+'">'+esc(e.title)+'</td><td style="'+TD+'">'+(d.gold?sgI(d.gold):'')+'</td><td style="'+TD+'">'+(d.toman?sgI(d.toman):'')+'</td><td style="'+TD+'">'+coinI(d.coin).replace(/^۰$/,'')+'</td><td style="'+TD+'">'+(d.jewel?sgI(d.jewel):'')+'</td></tr>'}).join('');
+  const meta='شماره: SUM-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'<br>تاریخ صدور: '+now()+'<br>مشتری: '+esc(S.cust)+'<br>تعداد تراکنش: '+fa(idx.length);
+  const inner='<table style="'+TB+';font-size:12px"><tr><th style="'+TH+'">ردیف</th><th style="'+TH+'">تاریخ</th><th style="'+TH+'">شرح</th><th style="'+TH+'">طلا (گرم)</th><th style="'+TH+'">تومان</th><th style="'+TH+'">سکه</th><th style="'+TH+'">زیورآلات (گرم)</th></tr>'+rows+'<tr><td style="'+TH+'" colspan="3">جمع</td><td style="'+TH+'">'+sgI(sum.gold)+'</td><td style="'+TH+'">'+sgI(sum.toman)+'</td><td style="'+TH+'">'+coinI(sum.coin)+'</td><td style="'+TH+'">'+sgI(sum.jewel)+'</td></tr></table><div style="font-weight:700">مانده حساب</div><table style="'+TB+'">'+balHead+'<tr><td style="'+TD+'">ابتدای دوره</td>'+balI(L[idx[0]].before)+'</tr><tr><td style="'+TD+'">پایان دوره</td>'+balI(L[idx[idx.length-1]].after)+'</tr></table>';
+  return invWrap('فاکتور کلی',meta,inner);
+}
+async function loadLibs(){
+  const ld=u=>new Promise((ok,no)=>{const x=document.createElement('script');x.src=u;x.onload=ok;x.onerror=()=>no(new Error('lib'));document.head.appendChild(x)});
+  if(!window.html2canvas)await ld('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  if(!window.jspdf)await ld('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+}
+async function toPdf(html,name){
+  toast('در حال ساخت فاکتور...');
+  try{
+    await loadLibs();
+    const box=document.createElement('div');box.style.cssText='position:fixed;left:-10000px;top:0;z-index:-1';box.innerHTML=html;document.body.appendChild(box);
+    try{await document.fonts.ready}catch(e){}
+    const cv=await html2canvas(box.firstElementChild,{scale:2,backgroundColor:'#ffffff',useCORS:true});
+    box.remove();
+    const pdf=new window.jspdf.jsPDF({unit:'pt',format:'a4'}),W=pdf.internal.pageSize.getWidth(),H=pdf.internal.pageSize.getHeight(),ph=Math.floor(cv.width*H/W);
+    for(let y=0,p=0;y<cv.height;y+=ph,p++){
+      const c=document.createElement('canvas');c.width=cv.width;c.height=Math.min(ph,cv.height-y);
+      c.getContext('2d').drawImage(cv,0,y,cv.width,c.height,0,0,cv.width,c.height);
+      if(p)pdf.addPage();
+      pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,c.height*W/cv.width);
+    }
+    pdf.save(name);toast('فاکتور آماده شد');
+  }catch(e){
+    const w=window.open('','_blank');
+    if(w){w.document.write('<!doctype html><meta charset="utf-8"><title>'+name+'</title>'+html+'<scr'+'ipt>onload=()=>print()<\/script>');w.document.close();toast('در پنجره چاپ، ذخیره به‌صورت PDF را بزنید')}
+    else toast('ساخت PDF ممکن نشد، اینترنت را بررسی کنید');
+  }
+}
+$('#i_all').onclick=()=>{
+  const f=$('#i_from').value,t=$('#i_to').value;
+  const h=invAll(f?new Date(f+'T00:00:00').getTime():0,t?new Date(t+'T00:00:00').getTime()+86400000:0);
+  if(!h){toast('تراکنشی در این بازه نیست');return}
+  toPdf(h,'anamis-statement.pdf');
+};
+function mType(){const v=$('#m_type').value;$('#m_g1').style.display=v==='man'?'none':'';$('#m_man').style.display=v==='man'?'':'none'}
+$('#m_type').onchange=mType;
+$('#m_cust').value=S.cust;
+$('#m_cust').oninput=()=>{S.cust=$('#m_cust').value.trim()||'مشتری';save()};
+$('#m_go').onclick=()=>{
+  const v=$('#m_type').value,ttl=$('#m_title').value.trim();let d,title;
+  if(v==='man'){d=zero();d.gold=num('#m_gold');d.toman=num('#m_toman');d.jewel=num('#m_jewel');d.coin[$('#m_ct').value]=num('#m_n');title=ttl||'تراکنش دستی ادمین'}
+  else{const w=num('#m_w');d=calc(v==='gin'?'gold_in':'gold_out',{w,k:750});title=(v==='gin'?'ورود طلا آبشده':'خروج طلا آبشده')+(w?'، '+fa(w)+' گرم':'')+(ttl?'، '+ttl:'')}
+  if(!lines(d).length){toast('مقدار را وارد کنید');return}
+  S.entries.push({title,date:now(),ts:Date.now(),note:'',d,manual:true});
+  save();render();
+  ['#m_w','#m_gold','#m_toman','#m_jewel','#m_n','#m_title'].forEach(i=>$(i).value='');
+  toast('در حساب ثبت شد');
+};
+if(!S.entries.length)seed();
+applyRole();board();render();renderQ();show();setInterval(tick,1000);pullLive();setInterval(pullLive,60000);
+</script>
+<script>
+if('serviceWorker' in navigator&&location.protocol!=='file:'){
+  const had=!!navigator.serviceWorker.controller;let rl=false;
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{});
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl){rl=true;location.reload()}});
+  });
+}
+</script>
+</body>
+</html>
